@@ -1,4 +1,4 @@
-# TinyTasks
+# PersoInfo Backend
 
 Welcome to _TinyTasks_, the most basic task management app in the whole wide world - no fancy UI, no mobile view,
 a very limited set of features and an even more limited set of tests. Fortunately, you are here to save the day and
@@ -122,3 +122,4 @@ Also, do not hesitate to contact us if you run into any problems. We are here to
 
 You can simply create a new branch and start working on _TinyTasks_. Feel free to create a pull request if you would
 like to see your changes merged into the application.
+# persoino_back
