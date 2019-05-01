@@ -1,10 +1,27 @@
+
+buildscript {    // Configuration for building
+  repositories {
+    jcenter()    // Bintray's repository - a fast Maven Central mirror & more
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.+'    // Latest 1.x.x release
+  }
+}
 plugins {
-  id 'org.springframework.boot' version '2.1.3.RELEASE'
+  id 'org.springframework.boot' version '2.1.4.RELEASE'
   id 'java'
+}
+repositories {   // repositories for Jar's you access in your code
+  maven {
+    url 'https://oss.sonatype.org/content/repositories/snapshots' // SNAPSHOT repository (if needed)
+  }
+  mavenCentral()
+  jcenter()
 }
 
 apply plugin: 'io.spring.dependency-management'
-
+apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
 group = 'com.coyoapp'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -15,21 +32,33 @@ configurations {
   }
 }
 
-repositories {
+repositories {   // repositories for Jar's you access in your code
+  maven {
+    url 'https://oss.sonatype.org/content/repositories/snapshots' // SNAPSHOT repository (if needed)
+  }
   mavenCentral()
+  jcenter()
 }
 
 dependencies {
-  compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.0.RELEASE'
-  compile 'org.springframework.boot:spring-boot-starter-web:2.1.0.RELEASE'
-  compile 'org.springframework.boot:spring-boot-starter-hateoas:2.1.0.RELEASE'
+  compile 'com.google.appengine:appengine-api-1.0-sdk:+'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  compile 'org.springframework.boot:spring-boot-starter-web'
+  compile 'org.springframework.boot:spring-boot-starter-hateoas'
   compile 'io.springfox:springfox-swagger2:2.6.1'
   compile 'io.springfox:springfox-swagger-ui:2.6.1'
   compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.7'
   compile 'org.modelmapper:modelmapper:2.3.2'
+  implementation 'org.postgresql:postgresql'
   runtime 'org.springframework.boot:spring-boot-devtools:2.1.0.RELEASE'
-  runtime 'mysql:mysql-connector-java:8.0.13'
+  runtime 'mysql:mysql-connector-java:8.0.15'
   testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.0.RELEASE'
   compileOnly 'org.projectlombok:lombok:1.18.6'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testCompile 'com.google.truth:truth:0.33'
+  testCompile 'org.mockito:mockito-all:1.10.19'
+
+  testCompile 'com.google.appengine:appengine-testing:+'
+  testCompile 'com.google.appengine:appengine-api-stubs:+'
+  testCompile 'com.google.appengine:appengine-tools-sdk:+'
 }

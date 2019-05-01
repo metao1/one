@@ -1,9 +1,25 @@
-## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
-spring.datasource.url = jdbc:mysql://localhost:3306/spring_app_db?useSSL=false
-spring.datasource.username = app_user
-spring.datasource.password = test123
+spring:
+  datasource:
+    #url: jdbc:postgresql://localhost:5432/tiny_task
+    #username: tiny_task
+    #password: demo123
+    url: postgres://wrudfnjaboyuzs:30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020@ec2-54-75-238-138:eu-west-1:compute:amazonaws:com:5432/d1ho51lfnekg9r
+    username: wrudfnjaboyuzs
+    password: 30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    hibernate:
+      ddl-auto: create-drop
 
-spring.jpa.hibernate.ddl-auto=create
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.generate-ddl=true
-spring.jpa.show-sql=true
+logging:
+  level:
+    com.coyoapp.tinytask: DEBUG
+server:
+  port: 8088

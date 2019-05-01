@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/task")
 @Api(description = "Operations pertaining to tasks in Task Management System")
 public class TaskController {
 
   @Autowired
   private TaskService taskService;
 
-  @PostMapping(value = "/task")
+  @PostMapping
   @ApiOperation(value = "Create a new task")
   public ResponseEntity<?> createTask(@RequestBody Task task) {
 
@@ -32,7 +32,7 @@ public class TaskController {
     return new ResponseEntity<>(task, HttpStatus.CREATED);
   }
 
-  @GetMapping(value = "/task")
+  @GetMapping
   @ApiOperation(value = "View a list of available tasks")
   public ResponseEntity<List<Task>> getTasks() {
 
@@ -44,7 +44,7 @@ public class TaskController {
 
   }
 
-  @GetMapping(value = "/task/{id}")
+  @GetMapping(value = "/{id}")
   @ApiOperation(value = "Get a task")
   public ResponseEntity<?> getTask(@PathVariable("id") String id) {
     Task task = taskService.getTask(id);
@@ -55,7 +55,7 @@ public class TaskController {
     return new ResponseEntity<>(task, HttpStatus.OK);
   }
 
-  @PutMapping(value = "/task/{id}")
+  @PutMapping(value = "/{id}")
   @ApiOperation(value = "Update a task")
   public ResponseEntity<?> updateTask(@PathVariable("id") String id, @RequestBody Task task) {
 
@@ -70,7 +70,7 @@ public class TaskController {
     return new ResponseEntity<Task>(currentTask, HttpStatus.OK);
   }
 
-  @DeleteMapping(value = "/task/{id}")
+  @DeleteMapping(value = "/{id}")
   @ApiOperation(value = "Delete a task")
   public ResponseEntity<?> deleteTask(@PathVariable("id") String id) {
 

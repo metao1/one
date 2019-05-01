@@ -36,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public boolean isTaskExist(Task task) {
-		return taskRepository.findByTitle(task.getTitle()) != null;
+		return taskRepository.findByTitle(task.getId()) != null;
 	}
 	
 	
