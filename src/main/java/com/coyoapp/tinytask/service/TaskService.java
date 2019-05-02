@@ -1,20 +1,22 @@
 package com.coyoapp.tinytask.service;
 
+import com.coyoapp.tinytask.dto.ResponseMap;
+import com.coyoapp.tinytask.dto.TaskDTO;
 import com.coyoapp.tinytask.entity.Task;
 
 import java.util.List;
 
 public interface TaskService {
 
-  public Task saveOrUpdateTask(Task task);
+  public ResponseMap<TaskDTO> saveOrUpdateTask(TaskDTO task);
 
-  public Task getTask(String id);
+  public ResponseMap<TaskDTO> getTask(String id);
 
   public void removeTask(String id);
 
-  public List<Task> getTasks();
+  public ResponseMap<List<TaskDTO>> getTasks();
 
-  public boolean isTaskExist(Task task);
+  public boolean isTaskExist(TaskDTO task);
 
 
 }

@@ -67,7 +67,7 @@ public class TaskController {
     currentTask.setTitle(task.getTitle());
     currentTask.setCompleted(task.getCompleted());
     taskService.saveOrUpdateTask(currentTask);
-    return new ResponseEntity<Task>(currentTask, HttpStatus.OK);
+    return new ResponseEntity<>(currentTask, HttpStatus.OK);
   }
 
   @DeleteMapping(value = "/{id}")
