@@ -3,7 +3,6 @@ package com.coyoapp.tinytask.dto;
 import com.coyoapp.tinytask.entity.Task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class DtoFactory {
 
