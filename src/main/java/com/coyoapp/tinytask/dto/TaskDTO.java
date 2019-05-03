@@ -6,7 +6,6 @@ import com.google.common.base.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Set;
 
-@XmlRootElement
 public class TaskDTO {
   private String id;
   private String title;
@@ -15,7 +14,7 @@ public class TaskDTO {
   private Boolean starred;
   private Boolean important;
   private Boolean deleted;
-  private Set<Tag> tags;
+  private Set<TagDTO> tags;
 
   @Override
   public boolean equals(Object o) {
@@ -86,11 +85,11 @@ public class TaskDTO {
     this.deleted = deleted;
   }
 
-  public Set<Tag> getTags() {
+  public Set<TagDTO> getTags() {
     return tags;
   }
 
-  public void setTags(Set<Tag> tags) {
+  public void setTags(Set<TagDTO> tags) {
     this.tags = tags;
   }
 }
