@@ -6,7 +6,7 @@ import com.google.common.base.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Set;
 
-
+@XmlRootElement
 public class TaskDTO {
   private String id;
   private String title;
