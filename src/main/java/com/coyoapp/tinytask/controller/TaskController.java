@@ -1,5 +1,8 @@
 package com.coyoapp.tinytask.controller;
 
+import com.coyoapp.tinytask.dto.ResponseMap;
+import com.coyoapp.tinytask.dto.TaskDTO;
+import com.coyoapp.tinytask.dto.TaskFactory;
 import com.coyoapp.tinytask.entity.Task;
 import com.coyoapp.tinytask.service.TaskService;
 import com.coyoapp.tinytask.util.CustomErrorType;
@@ -20,35 +23,36 @@ public class TaskController {
   @Autowired
   private TaskService taskService;
 
+  @Autowired
+  private TaskFactory taskFactory;
+
   @PostMapping
   @ApiOperation(value = "Create a new task")
-  public ResponseEntity<?> createTask(@RequestBody Task task) {
-
+  public ResponseEntity<?> createTask(@RequestBody TaskDTO task) {
+    ResponseMap<TaskDTO> map = new ResponseMap<>("task", task);
     if (taskService.isTaskExist(task)) {
       return new ResponseEntity<>(new CustomErrorType("Unable to create task. "
-        + "A task with name " + task.getTitle() + " already exist"), HttpStatus.CONFLICT);
+        + "title " + task.getTitle() + " already exist"), HttpStatus.CONFLICT);
     }
     taskService.saveOrUpdateTask(task);
-    return new ResponseEntity<>(task, HttpStatus.CREATED);
+    return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
 
   @GetMapping
   @ApiOperation(value = "View a list of available tasks")
-  public ResponseEntity<List<Task>> getTasks() {
-
-    List<Task> tasks = taskService.getTasks();
-    if (tasks.isEmpty()) {
+  public ResponseEntity<ResponseMap<List<TaskDTO>>> getTasks() {
+    ResponseMap<List<TaskDTO>> tasks = new ResponseMap<>("tasks", taskService.getTasks());
+    if (tasks.getResponse().isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     return new ResponseEntity<>(tasks, HttpStatus.OK);
-
   }
 
   @GetMapping(value = "/{id}")
   @ApiOperation(value = "Get a task")
   public ResponseEntity<?> getTask(@PathVariable("id") String id) {
-    Task task = taskService.getTask(id);
-    if (task == null) {
+    ResponseMap<TaskDTO> task = new ResponseMap<>("task", taskService.getTask(id));
+    if (task.getResponse() == null) {
       return new ResponseEntity<>(new CustomErrorType("Task with id " + id
         + " not found"), HttpStatus.NOT_FOUND);
     }
@@ -58,23 +62,22 @@ public class TaskController {
   @PutMapping(value = "/{id}")
   @ApiOperation(value = "Update a task")
   public ResponseEntity<?> updateTask(@PathVariable("id") String id, @RequestBody Task task) {
-
-    Task currentTask = taskService.getTask(id);
+    TaskDTO currentTask = taskService.getTask(id);
     if (currentTask == null) {
-      return new ResponseEntity<>(new CustomErrorType("Unable to update. User with id "
+      return new ResponseEntity<>(new CustomErrorType("Unable to update. Task with id "
         + id + " not found"), HttpStatus.NOT_FOUND);
     }
-    currentTask.setTitle(task.getTitle());
-    currentTask.setCompleted(task.getCompleted());
-    taskService.saveOrUpdateTask(currentTask);
-    return new ResponseEntity<>(currentTask, HttpStatus.OK);
+    TaskDTO taskDTO = taskFactory.buildTask(task);
+    taskService.saveOrUpdateTask(taskDTO);
+    ResponseMap<TaskDTO> updatedTask = new ResponseMap<>("task", taskService.getTask(id));
+    return new ResponseEntity<>(updatedTask, HttpStatus.OK);
   }
 
   @DeleteMapping(value = "/{id}")
   @ApiOperation(value = "Delete a task")
   public ResponseEntity<?> deleteTask(@PathVariable("id") String id) {
 
-    Task task = taskService.getTask(id);
+    TaskDTO task = taskService.getTask(id);
     if (task == null) {
       return new ResponseEntity<>(new CustomErrorType("Unable to delete. "
         + "User with id " + id + " not found"), HttpStatus.NOT_FOUND);

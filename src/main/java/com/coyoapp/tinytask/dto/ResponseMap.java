@@ -6,14 +6,13 @@ import org.springframework.lang.Nullable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Getter
 @JsonPropertyOrder({"message", "response"})
 @XmlRootElement
 public class ResponseMap<T> {
 
   private T response;
 
-  public String message;
+  private String message;
 
   ResponseMap() {
     //empty constructor for the jackson converter
@@ -29,6 +28,10 @@ public class ResponseMap<T> {
 
   public ResponseMap(String message) {
     this.message = message;
+  }
+
+  public String getMessage() {
+    return message;
   }
 
   public ResponseMap(String message, @Nullable T response) {

@@ -1,15 +1,16 @@
 package com.coyoapp.tinytask.dto;
 
 import com.coyoapp.tinytask.entity.Task;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 
-public class DtoFactory {
+public class TaskFactory {
 
   private final ObjectMapper mapper;
   private final ModelMapper modelMapper;
 
-  public DtoFactory(ModelMapper modelMapper, ObjectMapper mapper) {
+  public TaskFactory(ModelMapper modelMapper, ObjectMapper mapper) {
     this.mapper = mapper;
     this.modelMapper = modelMapper;
   }
@@ -35,4 +36,13 @@ public class DtoFactory {
   }
 
 
+  public <T> T fromJSON(final TypeReference<T> type, final String jsonPacket) {
+    T data = null;
+    try {
+      data = new ObjectMapper().readValue(jsonPacket, type);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return data;
+  }
 }

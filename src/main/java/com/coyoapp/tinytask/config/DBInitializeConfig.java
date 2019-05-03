@@ -25,6 +25,7 @@ public class DBInitializeConfig {
   public void initialize() {
     Set<Tag> tags = new HashSet<>();
     Tag tag1 = new Tag();
+    tag1.setTitle("Backend");
     tag1.setId(UUID.randomUUID().toString());
     tag1.setColor("#3c3c3c");
     tag1.setHandle("frontend");
@@ -39,7 +40,6 @@ public class DBInitializeConfig {
     task.setImportant(false);
     task.setTags(tags);
     task.setCompleted(false);
-
     tag1.getTasks().add(task);
     taskRepository.save(task);
 

@@ -1,13 +1,18 @@
 package com.coyoapp.tinytask;
 
-import io.swagger.annotations.Authorization;
+import com.coyoapp.tinytask.dto.ResponseMap;
+import com.coyoapp.tinytask.dto.TaskDTO;
+import com.coyoapp.tinytask.dto.TaskFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,16 +21,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TinyTaskApplicationTest {
@@ -33,7 +37,7 @@ public class TinyTaskApplicationTest {
   private MockMvc mvc;
 
   @Autowired
-  private ObjectMapper mapper;
+  private TaskFactory taskFactory;
 
   @Mock
   BindingResult bindingResult;
@@ -41,32 +45,84 @@ public class TinyTaskApplicationTest {
   @Autowired
   private WebApplicationContext wac;
   private String BASE_URL = "/api/";
+  private static TaskDTO taskDTO;
 
   @Before
-  public void setup() {
+  public void setup() throws Exception {
     this.bindingResult = Mockito.mock(BindingResult.class);
     this.mvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    if (taskDTO == null) {
+      this.mvc.perform(get(BASE_URL + "task")
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(status().is2xxSuccessful())
+        .andDo(print())
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").isString())
+        .andExpect(jsonPath("$.message").value("tasks"))
+        .andExpect(jsonPath("$.response").exists())
+        .andDo(result -> {
+          ResponseMap<List<TaskDTO>> json = taskFactory
+            .fromJSON(new TypeReference<ResponseMap<List<TaskDTO>>>() {
+            }, result.getResponse().getContentAsString());
+          assertThat(json).isNotNull();
+          assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
+          List<TaskDTO> response = json.getResponse();
+          taskDTO = response.get(0);
+        });
+    }
   }
 
-  @Test
-  public void getOneTask() throws Exception{
-    this.mvc.perform(get(BASE_URL+ "task"))
-      .andDo(print())
-      .andDo(result -> {
-        JavaType javaType = mapper.getTypeFactory().constructParametricType(ResponseMap.class, HouseDTO.class);
-        ResponseMap<HouseDTO> map = mapper.readValue(result.getResponse().getContentAsString(), javaType);
-        assertThat(map).isNotNull();
-        assertThat(map.getResponse().getName()).isEqualTo(this.houseMap1.getName());      })
-      .andExpect(status().isOk());
-
-    this.mvc.perform(BASE_URL + "task/1");
-  }
 
   @Test
-  public void getAllTasks() throws Exception {
-    this.mvc.perform(get(BASE_URL+ "task")
+  public void _getOneTask() throws Exception {
+
+    this.mvc.perform(get(BASE_URL + "task/" + taskDTO.getId())
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+      .andExpect(status().isOk())
       .andDo(print())
-      .andExpect(status().isOk());
+      .andExpect(jsonPath("$.message").exists())
+      .andExpect(jsonPath("$.message").isString())
+      .andExpect(jsonPath("$.message").value("task"))
+      .andExpect(jsonPath("$.response").exists())
+      .andDo(task -> {
+        ResponseMap<TaskDTO> dtoResponseMap = taskFactory.fromJSON(new TypeReference<ResponseMap<TaskDTO>>() {
+        }, task.getResponse().getContentAsString());
+        assertThat(dtoResponseMap.getResponse()).isEqualTo(taskDTO);
+      });
+  }
+
+  @Test
+  public void deleteTaskTest() throws Exception {
+    this.mvc.perform(delete(BASE_URL + "task/" + taskDTO.getId())
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+      .andExpect(status().isNotFound())
+      .andDo(print());
+  }
+
+
+  @Test
+  public void deleteTaskFailedTest() throws Exception {
+    this.mvc.perform(delete(BASE_URL + "task/" + taskDTO.getId())
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+      .andExpect(status().is2xxSuccessful())
+      .andDo(print());
+  }
+
+  @Test
+  public void _getAllTasks() throws Exception {
+    this.mvc.perform(get(BASE_URL + "task")
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+      .andExpect(status().is2xxSuccessful())
+      .andDo(print())
+      .andExpect(jsonPath("$.message").exists())
+      .andExpect(jsonPath("$.message").isString())
+      .andExpect(jsonPath("$.message").value("tasks"))
+      .andExpect(jsonPath("$.response").exists())
+      .andDo(result -> {
+        ResponseMap<List<TaskDTO>> json = taskFactory.fromJSON(new TypeReference<ResponseMap<List<TaskDTO>>>() {
+        }, result.getResponse().getContentAsString());
+        assertThat(json).isNotNull();
+        assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
+      });
   }
 }

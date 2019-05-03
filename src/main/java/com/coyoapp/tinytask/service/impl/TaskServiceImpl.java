@@ -1,7 +1,6 @@
 package com.coyoapp.tinytask.service.impl;
 
-import com.coyoapp.tinytask.dto.DtoFactory;
-import com.coyoapp.tinytask.dto.ResponseMap;
+import com.coyoapp.tinytask.dto.TaskFactory;
 import com.coyoapp.tinytask.dto.TaskDTO;
 import com.coyoapp.tinytask.entity.Task;
 import com.coyoapp.tinytask.exception.TaskNotFoundException;
@@ -20,25 +19,20 @@ public class TaskServiceImpl implements TaskService {
   @Autowired
   private TaskRepository taskRepository;
 
-
   @Autowired
-  private DtoFactory dtoFactory;
+  private TaskFactory taskFactory;
 
   @Override
-  public ResponseMap<TaskDTO> saveOrUpdateTask(TaskDTO taskDTO) {
-    Task task = dtoFactory.buildTask(taskDTO);
+  public TaskDTO saveOrUpdateTask(TaskDTO taskDTO) {
+    Task task = taskFactory.buildTask(taskDTO);
     Task savedTask = taskRepository.save(task);
-    return new ResponseMap<>(dtoFactory.buildTask(savedTask));
+    return taskFactory.buildTask(savedTask);
   }
 
   @Override
-  public ResponseMap<TaskDTO> getTask(String id) {
+  public TaskDTO getTask(String id) {
     return taskRepository.findById(id)
-      .map(task -> {
-        ResponseMap<TaskDTO> map = new ResponseMap<>(dtoFactory.buildTask(task));
-        map.message = "task";
-        return map;
-      })
+      .map(task -> taskFactory.buildTask(task))
       .orElseThrow(() -> new TaskNotFoundException(
         String.format("the expected %s task", id)));
   }
@@ -49,24 +43,23 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public ResponseMap<List<TaskDTO>> getTasks() {
+  public List<TaskDTO> getTasks() {
     List<Task> taskList = taskRepository.findAll();
     List<TaskDTO> taskDTOList = new ArrayList<>();
     taskList
       .stream()
       .filter(Objects::nonNull)
+      .filter(s -> s.getId() != null)
       .forEach(task -> {
-        TaskDTO taskDTO = dtoFactory.buildTask(task);
+        TaskDTO taskDTO = taskFactory.buildTask(task);
         taskDTOList.add(taskDTO);
       });
-    ResponseMap<List<TaskDTO>> map = new ResponseMap<>(taskDTOList);
-    map.message = "tasks";
-    return map;
+    return taskDTOList;
   }
 
   @Override
   public boolean isTaskExist(TaskDTO task) {
-    return taskRepository.findByTitle(task.id) != null;
+    return taskRepository.findByTitle(task.getId()) != null;
   }
 
 }
