@@ -1,9 +1,11 @@
 package com.coyoapp.tinytask.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Objects;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +26,8 @@ public class Task{
   private Boolean starred;
   private Boolean important;
   private Boolean deleted;
+  private Date startDate;
+  private Date dueDate;
 
   @ManyToMany(fetch = FetchType.LAZY,
     cascade = {
@@ -100,21 +104,33 @@ public class Task{
     this.tags = tags;
   }
 
+  public Date getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
+
+  public Date getDueDate() {
+    return dueDate;
+  }
+
+  public void setDueDate(Date dueDate) {
+    this.dueDate = dueDate;
+  }
+
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Task other = (Task) obj;
-    if (title == null) {
-      if (other.title != null)
-        return false;
-    } else if (!title.equals(other.title))
-      return false;
-    return true;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Task task = (Task) o;
+    return Objects.equal(getId(), task.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getId());
   }
 
   @Override

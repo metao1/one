@@ -1,7 +1,6 @@
 package com.coyoapp.tinytask.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Getter;
 import org.springframework.lang.Nullable;
 
 import javax.xml.bind.annotation.XmlRootElement;

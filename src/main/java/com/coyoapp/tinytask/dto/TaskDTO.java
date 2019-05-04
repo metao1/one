@@ -1,9 +1,8 @@
 package com.coyoapp.tinytask.dto;
 
-import com.coyoapp.tinytask.entity.Tag;
 import com.google.common.base.Objects;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 import java.util.Set;
 
 public class TaskDTO {
@@ -14,6 +13,8 @@ public class TaskDTO {
   private Boolean starred;
   private Boolean important;
   private Boolean deleted;
+  private Date startDate;
+  private Date dueDate;
   private Set<TagDTO> tags;
 
   @Override
@@ -91,5 +92,21 @@ public class TaskDTO {
 
   public void setTags(Set<TagDTO> tags) {
     this.tags = tags;
+  }
+
+  public Date getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
+
+  public Date getDueDate() {
+    return dueDate;
+  }
+
+  public void setDueDate(Date dueDate) {
+    this.dueDate = dueDate;
   }
 }
