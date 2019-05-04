@@ -5,6 +5,7 @@ import com.metao.persoinfo.dto.ObjectFactory;
 import com.metao.persoinfo.entity.Tag;
 import com.metao.persoinfo.entity.Task;
 import com.metao.persoinfo.repository.FilterRepository;
+import com.metao.persoinfo.repository.TagRepository;
 import com.metao.persoinfo.repository.TaskRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class DBInitializeConfig {
 
   @Autowired
   private TaskRepository taskRepository;
+
+  @Autowired
+  private TagRepository tagRepository;
 
   @Autowired
   private FilterRepository filterRepository;
@@ -34,6 +38,15 @@ public class DBInitializeConfig {
     tag1.setColor("#3c3c3c");
     tag1.setHandle("frontend");
     tags.add(tag1);
+    Tag tag2 = new Tag();
+    tag2.setTitle("Backend");
+    tag2.setId(UUID.randomUUID().toString());
+    tag2.setColor("#3c3c3c");
+    tag2.setHandle("frontend");
+    tags.add(tag2);
+
+    tagRepository.save(tag2);
+
     Task task = new Task();
 
     task.setId(UUID.randomUUID().toString());
