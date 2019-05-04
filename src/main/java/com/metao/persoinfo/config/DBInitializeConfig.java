@@ -43,7 +43,6 @@ public class DBInitializeConfig {
     tag2.setId(UUID.randomUUID().toString());
     tag2.setColor("#723f32");
     tag2.setHandle("frontend");
-    tags.add(tag2);
 
     tagRepository.save(tag2);
 
