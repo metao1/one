@@ -36,10 +36,10 @@ public class DBInitializeConfig {
     tag1.setTitle("Backend");
     tag1.setId(UUID.randomUUID().toString());
     tag1.setColor("#3c3c3c");
-    tag1.setHandle("frontend");
+    tag1.setHandle("backend");
     tags.add(tag1);
     Tag tag2 = new Tag();
-    tag2.setTitle("Backend");
+    tag2.setTitle("Frontend");
     tag2.setId(UUID.randomUUID().toString());
     tag2.setColor("#3c3c3c");
     tag2.setHandle("frontend");
