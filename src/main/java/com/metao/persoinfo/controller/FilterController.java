@@ -21,7 +21,6 @@ public class FilterController {
     @Autowired
     private FilterService filterService;
 
-
     @PostMapping
     @ApiOperation(value = "Create a new filter")
     public ResponseEntity<?> createFilterDTO(@RequestBody FilterDTO filterDTO) {
@@ -74,7 +73,7 @@ public class FilterController {
       FilterDTO filterDTO = filterService.getModel(id);
       if (filterDTO == null) {
         return new ResponseEntity<>(new CustomErrorType("Unable to delete. "
-          + "User with id " + id + " not found"), HttpStatus.NOT_FOUND);
+          + "Filter with id " + id + " not found"), HttpStatus.NOT_FOUND);
       }
       filterService.removeModel(id);
       return new ResponseEntity<FilterDTO>(HttpStatus.NO_CONTENT);

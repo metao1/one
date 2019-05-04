@@ -1,6 +1,7 @@
 package com.metao.persoinfo.dto;
 
 import com.metao.persoinfo.entity.Filter;
+import com.metao.persoinfo.entity.Tag;
 import com.metao.persoinfo.entity.Task;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -15,6 +16,26 @@ public class ObjectFactory {
   public ObjectFactory(ModelMapper modelMapper, ObjectMapper mapper) {
     this.mapper = mapper;
     this.modelMapper = modelMapper;
+  }
+
+  /**
+   * Builds Tag from TagDTO
+   *
+   * @param tag: Tag
+   * @return TagDTO
+   */
+  public TagDTO buildTag(Tag tag) {
+    return modelMapper.map(tag, TagDTO.class);
+  }
+
+  /**
+   * Builds TagDTO from Tag
+   *
+   * @param tagDTO: TagDTO
+   * @return Tag
+   */
+  public Tag buildTag(TagDTO tagDTO) {
+    return modelMapper.map(tagDTO, Tag.class);
   }
 
   /**
@@ -38,10 +59,10 @@ public class ObjectFactory {
   }
 
   /**
-   * Builds TaskDTO from Task
+   * Builds FilterDTO from Filter
    *
    * @param filterDTO: FilterDTO
-   * @return TaskDTO
+   * @return Filter
    */
   public Filter buildFilter(FilterDTO filterDTO) {
     return modelMapper.map(filterDTO, Filter.class);
@@ -56,6 +77,7 @@ public class ObjectFactory {
   public Task buildTask(TaskDTO taskDto) {
     return modelMapper.map(taskDto, Task.class);
   }
+
 
   public <T> T fromJSON(final TypeReference<T> type, final String jsonPacket) {
     T data = null;

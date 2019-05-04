@@ -1,5 +1,7 @@
 package com.metao.persoinfo.dto;
 
+import com.google.common.base.Objects;
+
 public class TagDTO {
 
   private String id;
@@ -40,5 +42,18 @@ public class TagDTO {
 
   public void setColor(String color) {
     this.color = color;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    TagDTO tagDTO = (TagDTO) o;
+    return Objects.equal(getTitle(), tagDTO.getTitle());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getTitle());
   }
 }

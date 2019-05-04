@@ -1,4 +1,4 @@
-package com.metao.persoinfo.repo;
+package com.metao.persoinfo.repository;
 
 import com.metao.persoinfo.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;

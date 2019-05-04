@@ -4,7 +4,7 @@ import com.metao.persoinfo.dto.FilterDTO;
 import com.metao.persoinfo.dto.ObjectFactory;
 import com.metao.persoinfo.entity.Filter;
 import com.metao.persoinfo.exception.NotFoundException;
-import com.metao.persoinfo.repo.FilterRepository;
+import com.metao.persoinfo.repository.FilterRepository;
 import com.metao.persoinfo.service.GeneralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

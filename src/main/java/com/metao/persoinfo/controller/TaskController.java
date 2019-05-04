@@ -75,7 +75,7 @@ public class TaskController {
     TaskDTO task = taskService.getModel(id);
     if (task == null) {
       return new ResponseEntity<>(new CustomErrorType("Unable to delete. "
-        + "User with id " + id + " not found"), HttpStatus.NOT_FOUND);
+        + "Task with id " + id + " not found"), HttpStatus.NOT_FOUND);
     }
     taskService.removeModel(id);
     return new ResponseEntity<Task>(HttpStatus.NO_CONTENT);

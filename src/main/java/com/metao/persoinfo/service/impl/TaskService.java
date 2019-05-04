@@ -4,7 +4,7 @@ import com.metao.persoinfo.dto.ObjectFactory;
 import com.metao.persoinfo.dto.TaskDTO;
 import com.metao.persoinfo.entity.Task;
 import com.metao.persoinfo.exception.NotFoundException;
-import com.metao.persoinfo.repo.TaskRepository;
+import com.metao.persoinfo.repository.TaskRepository;
 import com.metao.persoinfo.service.GeneralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
