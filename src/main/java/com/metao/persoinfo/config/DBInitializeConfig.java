@@ -15,7 +15,6 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Configuration
-@Profile("dev")
 public class DBInitializeConfig {
 
   @Autowired
