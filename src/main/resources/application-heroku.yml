@@ -20,6 +20,6 @@ spring:
 
 logging:
   level:
-    com.coyoapp.tinytask: DEBUG
+    com.metao.persoinfo: DEBUG
 server:
   port: 8088

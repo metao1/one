@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: dev
+    include: swagger
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tiny_task
+    username: tiny_task
+    password: demo123
+    #url: jdbc:postgresql://c2-54-75-238-138.eu-west-1.compute.amazonaws.com:5432/d1ho51lfnekg9r?sslmode=require&user=wrudfnjaboyuzs&password=30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
+    #username: wrudfnjaboyuzs
+    #password: 30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    hibernate:
+      ddl-auto: create-drop
+
+logging:
+  level:
+    com.metao.persoinfo: DEBUG
+server:
+  port: 8088

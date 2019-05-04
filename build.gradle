@@ -22,7 +22,7 @@ repositories {   // repositories for Jar's you access in your code
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
-group = 'com.coyoapp'
+group = 'com.metao'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
