@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
       .allowedOrigins("*");
   }
 
- /* @Bean
+  @Bean
   public FilterRegistrationBean corsFilter() {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     CorsConfiguration config = new CorsConfiguration();
@@ -32,5 +32,5 @@ public class WebConfig implements WebMvcConfigurer {
     FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
     bean.setOrder(0);
     return bean;
-  }*/
+  }
 }
