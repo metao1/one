@@ -1,8 +1,11 @@
 spring:
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
-    username: postgres
-    password: mehrdad
+    url: jdbc:mysql://remotemysql.com:3306/oRGMFoEEBj?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: oRGMFoEEBj
+    password: vxF1JvpMw9
+    #url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
+    #username: postgres
+    #password: mehrdad
     #url: jdbc:mysql://127.0.0.1:3306/tiny_task?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     #username: mehrdad
     #password: password
@@ -10,7 +13,8 @@ spring:
     #username: wrudfnjaboyuzs
     #password: 30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    #database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     properties:
       hibernate:
         temp:
