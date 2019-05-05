@@ -1,5 +1,6 @@
 package com.metao.persoinfo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Tag {
       CascadeType.MERGE
     },
     mappedBy = "tags")
+  @JsonIgnoreProperties("tags")
   private Set<Task> tasks = new HashSet<>();
 
   public Set<Task> getTasks() {

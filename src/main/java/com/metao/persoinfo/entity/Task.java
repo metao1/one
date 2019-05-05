@@ -1,6 +1,5 @@
 package com.metao.persoinfo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Objects;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -34,10 +33,6 @@ public class Task{
       CascadeType.PERSIST,
       CascadeType.MERGE
     })
-  @JoinTable(name = "task_tags",
-    joinColumns = { @JoinColumn(name = "task_id") },
-    inverseJoinColumns = { @JoinColumn(name = "tag_id") })
-  @JsonIgnoreProperties("tasks")
   private Set<Tag> tags = new HashSet<>();
 
   public String getId() {

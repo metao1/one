@@ -31,7 +31,7 @@ public class DBInitializeConfig {
 
   @PostConstruct
   public void initialize() {
-   /* Set<Tag> tags = new HashSet<>();
+    Set<Tag> tags = new HashSet<>();
     Tag tag1 = new Tag();
     tag1.setTitle("Backend");
     tag1.setId(UUID.randomUUID().toString());
@@ -57,7 +57,7 @@ public class DBInitializeConfig {
     task.setTags(tags);
     task.setCompleted(false);
     tag1.getTasks().add(task);
-    taskRepository.save(task);*/
+    taskRepository.save(task);
 
     String filters = "[{\"id\":\"0\",\"handle\":\"starred\",\"title\":\"Starred\",\"icon\":\"star\"},{\"id\":\"1\",\"handle\":\"important\",\"title\":\"Priority\",\"icon\":\"error\"},{\"id\":\"2\",\"handle\":\"dueDate\",\"title\":\"Sheduled\",\"icon\":\"schedule\"},{\"id\":\"3\",\"handle\":\"today\",\"title\":\"Today\",\"icon\":\"today\"},{\"id\":\"4\",\"handle\":\"completed\",\"title\":\"Done\",\"icon\":\"check\"},{\"id\":\"5\",\"handle\":\"deleted\",\"title\":\"Deleted\",\"icon\":\"delete\"}]";
 
