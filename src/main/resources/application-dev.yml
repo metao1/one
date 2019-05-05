@@ -10,7 +10,7 @@ spring:
     #username: wrudfnjaboyuzs
     #password: 30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     properties:
       hibernate:
         temp:
