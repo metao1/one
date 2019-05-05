@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/tiny_task
+    url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
     username: postgres
     password: mehrdad
     #url: jdbc:mysql://127.0.0.1:3306/tiny_task?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
