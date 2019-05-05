@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: dev
-    include: swagger
   datasource:
     #url: jdbc:postgresql://localhost:5432/tiny_task
     #username: tiny_task
