@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://persoinfo.github.io", maxAge = 3600)
 @RequestMapping("/api/task")
 @Api(description = "Operations pertaining to tasks in Task Management System")
 public class TaskController {

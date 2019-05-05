@@ -57,7 +57,7 @@ dependencies {
   //compile group: 'com.google.appengine', name: 'gradle-appengine-plugin', version: '1.9.59'
 
   runtime 'org.springframework.boot:spring-boot-devtools:2.1.0.RELEASE'
-  //runtime 'mysql:mysql-connector-java:8.0.15'
+  runtime 'mysql:mysql-connector-java:8.0.15'
   testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.0.RELEASE'
   testCompile 'org.springframework.boot:spring-boot-starter-test'
   testCompile 'com.google.truth:truth:0.33'
