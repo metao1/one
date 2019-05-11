@@ -5,7 +5,7 @@ spring:
     #password: tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB
     url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
     username: postgres
-    password: mehrdad
+    password: n{7^YVd=
     #url: jdbc:mysql://127.0.0.1:3306/tiny_task?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     #username: mehrdad
     #password: password
