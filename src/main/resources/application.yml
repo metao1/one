@@ -14,7 +14,8 @@ spring:
     #password: 30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
   jpa:
     #database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    database-platform: org.hibernate.dialect.MySQL8InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
     properties:
       hibernate:
         temp:
@@ -23,7 +24,7 @@ spring:
           lob:
             non_contextual_creation: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
 
 logging:
   level:
