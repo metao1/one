@@ -1,11 +1,11 @@
 spring:
   datasource:
-    url: jdbc:postgres://kctyaibl:tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB@isilo.db.elephantsql.com:5432/kctyaib
-    username: kctyaibl
-    password: tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB
-    #url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
-    #username: postgres
-    #password: mehrdad
+    #url: jdbc:postgres://kctyaibl:tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB@isilo.db.elephantsql.com:5432/kctyaib
+    #username: kctyaibl
+    #password: tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB
+    url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
+    username: postgres
+    password: mehrdad
     #url: jdbc:mysql://127.0.0.1:3306/tiny_task?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     #username: mehrdad
     #password: password
