@@ -1,40 +1,52 @@
 package com.metao.persoinfo.service.impl;
 
+import com.google.common.collect.Sets;
 import com.metao.persoinfo.dto.ObjectFactory;
+import com.metao.persoinfo.dto.TagDTO;
 import com.metao.persoinfo.dto.TaskDTO;
 import com.metao.persoinfo.entity.Task;
 import com.metao.persoinfo.exception.NotFoundException;
+import com.metao.persoinfo.exception.TaskException;
 import com.metao.persoinfo.repository.TaskRepository;
 import com.metao.persoinfo.service.GeneralService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class TaskService implements GeneralService<TaskDTO> {
 
-  @Autowired
-  private TaskRepository taskRepository;
+  private final TaskRepository taskRepository;
 
-  @Autowired
-  private ObjectFactory objectFactory;
+  private final ObjectFactory objectFactory;
+
+  public TaskService(TaskRepository taskRepository, ObjectFactory objectFactory) {
+    this.taskRepository = taskRepository;
+    this.objectFactory = objectFactory;
+  }
 
   @Override
   public TaskDTO saveOrUpdateModel(TaskDTO object) {
-    Task task = objectFactory.buildTask(object);
-    Task savedTask = taskRepository.save(task);
-    return objectFactory.buildTask(savedTask);
+    if (object.getDueDate().after(object.getStartDate())) {
+      if (object.getTags() != null) {//remove duplicates
+        Set<TagDTO> tagDTOSet = new HashSet<>(object.getTags());
+        if (tagDTOSet.size() > 0) {
+          object.setTags(Sets.newConcurrentHashSet(tagDTOSet));
+        }
+      }
+      Task task = objectFactory.buildTask(object);
+      Task savedTask = taskRepository.save(task);
+      return objectFactory.buildTask(savedTask);
+    }
+    throw new TaskException("The due date should be after started date");
   }
 
   @Override
   public TaskDTO getModel(String id) {
     return taskRepository.findById(id)
-      .map(task -> objectFactory.buildTask(task))
+      .map(objectFactory::buildTask)
       .orElseThrow(() -> new NotFoundException(
-        String.format("the expected %s task", id)));
+        String.format("the expected %s task not found", id)));
   }
 
   @Override

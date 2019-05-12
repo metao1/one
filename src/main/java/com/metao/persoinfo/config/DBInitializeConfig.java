@@ -61,7 +61,7 @@ public class DBInitializeConfig {
 
     String filters = "[{\"id\":\"0\",\"handle\":\"starred\",\"title\":\"Starred\",\"icon\":\"star\"},{\"id\":\"1\",\"handle\":\"important\",\"title\":\"Priority\",\"icon\":\"error\"},{\"id\":\"2\",\"handle\":\"dueDate\",\"title\":\"Sheduled\",\"icon\":\"schedule\"},{\"id\":\"3\",\"handle\":\"today\",\"title\":\"Today\",\"icon\":\"today\"},{\"id\":\"4\",\"handle\":\"completed\",\"title\":\"Done\",\"icon\":\"check\"},{\"id\":\"5\",\"handle\":\"deleted\",\"title\":\"Deleted\",\"icon\":\"delete\"}]";
 
-    List<FilterDTO> filterList = objectFactory.fromJSON(new TypeReference<List<FilterDTO>>() {
+    List<FilterDTO> filterList = objectFactory.fromJson(new TypeReference<List<FilterDTO>>() {
     }, filters);
 
     assert filterList != null;

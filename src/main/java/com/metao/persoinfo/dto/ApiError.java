@@ -13,16 +13,14 @@ import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
-@XmlRootElement
 public class ApiError {
 
   @JsonProperty
   private HttpStatus status;
   @JsonFormat(shape = JsonFormat.Shape.NUMBER)
   private Date timestamp;
-  @Length(min = 0, max = 50)
+  @Length(min = 0, max = 255)
   private String message;
-  private String debugMessage;
 
   private ApiError() {
     timestamp = new Date();
@@ -43,6 +41,13 @@ public class ApiError {
     this();
     this.status = status;
     this.message = message;
-    this.debugMessage = ex.getLocalizedMessage();
+  }
+
+  public HttpStatus getStatus() {
+    return status;
+  }
+
+  public String getMessage() {
+    return message;
   }
 }

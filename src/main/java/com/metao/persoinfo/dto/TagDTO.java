@@ -12,6 +12,17 @@ public class TagDTO {
 
   private String color;
 
+  public TagDTO(){
+
+  }
+
+  public TagDTO(String id, String handle, String title, String color) {
+    this.id = id;
+    this.handle = handle;
+    this.title = title;
+    this.color = color;
+  }
+
   public String getId() {
     return id;
   }

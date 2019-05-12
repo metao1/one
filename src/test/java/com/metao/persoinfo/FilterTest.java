@@ -38,7 +38,7 @@ public class FilterTest extends BaseTest {
       .andExpect(jsonPath("$.message").value("filters"))
       .andExpect(jsonPath("$.response").exists())
       .andDo(result -> {
-        ResponseMap<List<FilterDTO>> json = objectFactory.fromJSON(new TypeReference<ResponseMap<List<FilterDTO>>>() {
+        ResponseMap<List<FilterDTO>> json = objectFactory.fromJson(new TypeReference<ResponseMap<List<FilterDTO>>>() {
         }, result.getResponse().getContentAsString());
         assertThat(json).isNotNull();
         assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
@@ -58,7 +58,7 @@ public class FilterTest extends BaseTest {
         .andExpect(jsonPath("$.response").exists())
         .andDo(result -> {
           ResponseMap<List<FilterDTO>> json = objectFactory
-            .fromJSON(new TypeReference<ResponseMap<List<FilterDTO>>>() {
+            .fromJson(new TypeReference<ResponseMap<List<FilterDTO>>>() {
             }, result.getResponse().getContentAsString());
           assertThat(json).isNotNull();
           assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
@@ -79,7 +79,7 @@ public class FilterTest extends BaseTest {
       .andExpect(jsonPath("$.message").value("filter"))
       .andExpect(jsonPath("$.response").exists())
       .andDo(filter -> {
-        ResponseMap<FilterDTO> dtoResponseMap = objectFactory.fromJSON(new TypeReference<ResponseMap<FilterDTO>>() {
+        ResponseMap<FilterDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<FilterDTO>>() {
         }, filter.getResponse().getContentAsString());
         assertThat(dtoResponseMap.getResponse()).isEqualTo(filterDTO);
       });

@@ -1,21 +1,25 @@
 package com.metao.persoinfo;
 
-import com.metao.persoinfo.dto.ResponseMap;
-import com.metao.persoinfo.dto.TaskDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.metao.persoinfo.dto.*;
+import com.metao.persoinfo.service.impl.TaskService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.mockito.internal.util.collections.Sets;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +30,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TaskTest extends BaseTest {
 
   private static TaskDTO taskDTO;
+
+  @Autowired
+  private ObjectFactory objectFactory;
+
+  @Autowired
+  private TaskService taskService;
 
   @Test
   public void getAllTasks() throws Exception {
@@ -38,7 +48,7 @@ public class TaskTest extends BaseTest {
       .andExpect(jsonPath("$.message").value("tasks"))
       .andExpect(jsonPath("$.response").exists())
       .andDo(result -> {
-        ResponseMap<List<TaskDTO>> json = objectFactory.fromJSON(new TypeReference<ResponseMap<List<TaskDTO>>>() {
+        ResponseMap<List<TaskDTO>> json = objectFactory.fromJson(new TypeReference<ResponseMap<List<TaskDTO>>>() {
         }, result.getResponse().getContentAsString());
         assertThat(json).isNotNull();
         assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
@@ -58,7 +68,7 @@ public class TaskTest extends BaseTest {
         .andExpect(jsonPath("$.response").exists())
         .andDo(result -> {
           ResponseMap<List<TaskDTO>> json = objectFactory
-            .fromJSON(new TypeReference<ResponseMap<List<TaskDTO>>>() {
+            .fromJson(new TypeReference<ResponseMap<List<TaskDTO>>>() {
             }, result.getResponse().getContentAsString());
           assertThat(json).isNotNull();
           assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
@@ -79,9 +89,147 @@ public class TaskTest extends BaseTest {
       .andExpect(jsonPath("$.message").value("task"))
       .andExpect(jsonPath("$.response").exists())
       .andDo(task -> {
-        ResponseMap<TaskDTO> dtoResponseMap = objectFactory.fromJSON(new TypeReference<ResponseMap<TaskDTO>>() {
+        ResponseMap<TaskDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
         }, task.getResponse().getContentAsString());
         assertThat(dtoResponseMap.getResponse()).isEqualTo(taskDTO);
+      });
+  }
+
+  @Test
+  public void updateTaskTest() throws Exception {
+    TaskDTO taskDTO = new TaskDTO();
+    taskDTO.setId(UUID.randomUUID().toString());
+    taskDTO.setTitle("Task Title");
+    taskDTO.setDeleted(false);
+    taskDTO.setCompleted(false);
+    Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
+    calendar.set(2019, Calendar.MAY, 11);
+    taskDTO.setStartDate(new Date());
+    taskDTO.setDueDate(calendar.getTime());
+    taskDTO.setImportant(false);
+    taskDTO.setTags(Sets.newSet(new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232")));
+    taskService.saveOrUpdateModel(taskDTO);//save the task first
+    taskDTO.setTitle("updated title");
+    String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
+    }, taskDTO);
+    this.mvc.perform(put(BASE_URL + taskDTO.getId())
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+      .content(jsonBody))
+      .andDo(print())
+      .andExpect(status().is2xxSuccessful())
+      .andExpect(jsonPath("$.message").exists())
+      .andExpect(jsonPath("$.message").isString())
+      .andExpect(jsonPath("$.message").value("task"))
+      .andExpect(jsonPath("$.response").exists())
+      .andDo(task -> {
+        ResponseMap<TaskDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
+        }, task.getResponse().getContentAsString());
+        assertThat(dtoResponseMap.getResponse()).isEqualTo(taskDTO);
+        assertThat(dtoResponseMap.getResponse().getTitle()).isEqualTo("updated title");
+      });
+  }
+
+  @Test
+  public void saveTaskTest() throws Exception {
+    TaskDTO taskDTO = new TaskDTO();
+    taskDTO.setId(UUID.randomUUID().toString());
+    taskDTO.setTitle("Task Title");
+    taskDTO.setDeleted(false);
+    taskDTO.setCompleted(false);
+    taskDTO.setStartDate(new Date());
+    Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
+    calendar.add(Calendar.DAY_OF_MONTH, 4);
+    taskDTO.setDueDate(calendar.getTime());
+    taskDTO.setImportant(false);
+    TagDTO tag = new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232");
+    taskDTO.setTags(Sets.newSet(tag));
+    String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
+    }, taskDTO);
+    this.mvc.perform(post(BASE_URL)
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+      .content(jsonBody))
+      .andDo(print())
+      .andExpect(status().is2xxSuccessful())
+      .andExpect(jsonPath("$.message").exists())
+      .andExpect(jsonPath("$.message").isString())
+      .andExpect(jsonPath("$.message").value("task"))
+      .andExpect(jsonPath("$.response").exists())
+      .andDo(task -> {
+        ResponseMap<TaskDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
+        }, task.getResponse().getContentAsString());
+        assertThat(dtoResponseMap.getResponse()).isEqualTo(taskDTO);
+        assertThat(dtoResponseMap.getResponse().getTitle()).isEqualTo("Task Title");
+        assertThat(dtoResponseMap.getResponse().getTags()).contains(tag);
+        assertThat(dtoResponseMap.getResponse().getStartDate())
+          .isBefore(dtoResponseMap.getResponse().getDueDate());
+      });
+  }
+
+  @Test
+  public void saveTaskDueDateWrongFailedTest() throws Exception {
+    TaskDTO taskDTO = new TaskDTO();
+    taskDTO.setId(UUID.randomUUID().toString());
+    taskDTO.setTitle("Task Title");
+    taskDTO.setDeleted(false);
+    taskDTO.setCompleted(false);
+    taskDTO.setStartDate(new Date());
+    Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
+    taskDTO.setDueDate(calendar.getTime());
+    taskDTO.setImportant(false);
+    TagDTO tag = new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232");
+    taskDTO.setTags(Sets.newSet(tag));
+    String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
+    }, taskDTO);
+    this.mvc.perform(post(BASE_URL)
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+      .content(jsonBody))
+      .andDo(print())
+      .andExpect(status().isInternalServerError())
+      .andExpect(result -> {
+        ApiError dtoResponseMap = objectFactory.fromJson(new TypeReference<ApiError>() {
+        }, result.getResponse().getContentAsString());
+        assertThat(dtoResponseMap).isNotNull();
+        assertThat(dtoResponseMap.getMessage()).isNotNull();
+        assertThat(dtoResponseMap.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(dtoResponseMap.getMessage()).isEqualTo("The due date should be after started date");
+      });
+  }
+
+  @Test
+  public void saveTaskWithDuplicatesTagsTest() throws Exception {
+    TaskDTO taskDTO = new TaskDTO();
+    taskDTO.setId(UUID.randomUUID().toString());
+    taskDTO.setTitle("Task Title");
+    taskDTO.setDeleted(false);
+    taskDTO.setCompleted(false);
+    taskDTO.setStartDate(new Date());
+    Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
+    calendar.add(Calendar.DAY_OF_MONTH, 4);
+    taskDTO.setDueDate(calendar.getTime());
+    taskDTO.setImportant(false);
+    TagDTO tag = new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232");
+    TagDTO tag2 = new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232");
+    taskDTO.setTags(Sets.newSet(tag, tag2));
+    String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
+    }, taskDTO);
+    this.mvc.perform(post(BASE_URL)
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+      .content(jsonBody))
+      .andDo(print())
+      .andExpect(status().is2xxSuccessful())
+      .andExpect(jsonPath("$.message").exists())
+      .andExpect(jsonPath("$.message").isString())
+      .andExpect(jsonPath("$.message").value("task"))
+      .andExpect(jsonPath("$.response").exists())
+      .andDo(task -> {
+        ResponseMap<TaskDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
+        }, task.getResponse().getContentAsString());
+        assertThat(dtoResponseMap.getResponse()).isEqualTo(taskDTO);
+        assertThat(dtoResponseMap.getResponse().getTitle()).isEqualTo("Task Title");
+        assertThat(dtoResponseMap.getResponse().getTags()).contains(tag);
+        assertEquals(1, dtoResponseMap.getResponse().getTags().size());
+        assertThat(dtoResponseMap.getResponse().getStartDate())
+          .isBefore(dtoResponseMap.getResponse().getDueDate());
       });
   }
 
@@ -95,10 +243,17 @@ public class TaskTest extends BaseTest {
 
   @Test
   public void deleteTaskFailedTest() throws Exception {
-    this.mvc.perform(delete(BASE_URL + taskDTO.getId())
+    this.mvc.perform(delete(BASE_URL + 12333L)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andDo(print())
-      .andExpect(status().isNotFound());
+      .andExpect(status().isNotFound())
+      .andExpect(result -> {
+        ApiError dtoResponseMap = objectFactory.fromJson(new TypeReference<ApiError>() {
+        }, result.getResponse().getContentAsString());
+        assertThat(dtoResponseMap).isNotNull();
+        assertThat(dtoResponseMap.getMessage()).isNotNull();
+        assertThat(dtoResponseMap.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(dtoResponseMap.getMessage()).isEqualTo(String.format("the expected %d task not found", 12333L));
+      });
   }
-
 }

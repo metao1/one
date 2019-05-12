@@ -6,7 +6,6 @@ import org.springframework.lang.Nullable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonPropertyOrder({"message", "response"})
-@XmlRootElement
 public class ResponseMap<T> {
 
   private T response;

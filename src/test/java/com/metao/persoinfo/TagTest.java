@@ -38,7 +38,7 @@ public class TagTest extends BaseTest {
       .andExpect(jsonPath("$.message").value("tags"))
       .andExpect(jsonPath("$.response").exists())
       .andDo(result -> {
-        ResponseMap<List<TagDTO>> json = objectFactory.fromJSON(new TypeReference<ResponseMap<List<TagDTO>>>() {
+        ResponseMap<List<TagDTO>> json = objectFactory.fromJson(new TypeReference<ResponseMap<List<TagDTO>>>() {
         }, result.getResponse().getContentAsString());
         assertThat(json).isNotNull();
         assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
@@ -58,7 +58,7 @@ public class TagTest extends BaseTest {
         .andExpect(jsonPath("$.response").exists())
         .andDo(result -> {
           ResponseMap<List<TagDTO>> json = objectFactory
-            .fromJSON(new TypeReference<ResponseMap<List<TagDTO>>>() {
+            .fromJson(new TypeReference<ResponseMap<List<TagDTO>>>() {
             }, result.getResponse().getContentAsString());
           assertThat(json).isNotNull();
           assertThat(json.getResponse().size()).isGreaterThanOrEqualTo(0);
@@ -79,7 +79,7 @@ public class TagTest extends BaseTest {
       .andExpect(jsonPath("$.message").value("tag"))
       .andExpect(jsonPath("$.response").exists())
       .andDo(tag -> {
-        ResponseMap<TagDTO> dtoResponseMap = objectFactory.fromJSON(new TypeReference<ResponseMap<TagDTO>>() {
+        ResponseMap<TagDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TagDTO>>() {
         }, tag.getResponse().getContentAsString());
         assertThat(dtoResponseMap.getResponse()).isEqualTo(tagDTO);
       });
