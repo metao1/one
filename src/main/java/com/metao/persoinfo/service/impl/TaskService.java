@@ -30,18 +30,19 @@ public class TaskService implements GeneralService<TaskDTO> {
     if (object.getDueDate() != null &&
       object.getStartDate() != null &&
       object.getDueDate()
-        .after(object.getStartDate())) {
-      if (object.getTags() != null) {//remove duplicates
-        Set<TagDTO> tagDTOSet = new HashSet<>(object.getTags());
-        if (tagDTOSet.size() > 0) {
-          object.setTags(Sets.newConcurrentHashSet(tagDTOSet));
-        }
-      }
-      Task task = objectFactory.buildTask(object);
-      Task savedTask = taskRepository.save(task);
-      return objectFactory.buildTask(savedTask);
+        .before(object.getStartDate())) {
+      throw new TaskException("The due date should be after started date");
+
     }
-    throw new TaskException("The due date should be after started date");
+    if (object.getTags() != null) {//remove duplicates
+      Set<TagDTO> tagDTOSet = new HashSet<>(object.getTags());
+      if (tagDTOSet.size() > 0) {
+        object.setTags(Sets.newConcurrentHashSet(tagDTOSet));
+      }
+    }
+    Task task = objectFactory.buildTask(object);
+    Task savedTask = taskRepository.save(task);
+    return objectFactory.buildTask(savedTask);
   }
 
   @Override
