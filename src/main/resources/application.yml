@@ -24,7 +24,7 @@ spring:
           lob:
             non_contextual_creation: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
 
 logging:
   level:
