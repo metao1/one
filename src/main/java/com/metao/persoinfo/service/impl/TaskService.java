@@ -27,7 +27,10 @@ public class TaskService implements GeneralService<TaskDTO> {
 
   @Override
   public TaskDTO saveOrUpdateModel(TaskDTO object) {
-    if (object.getDueDate().after(object.getStartDate())) {
+    if (object.getDueDate() != null &&
+      object.getStartDate() != null &&
+      object.getDueDate()
+        .after(object.getStartDate())) {
       if (object.getTags() != null) {//remove duplicates
         Set<TagDTO> tagDTOSet = new HashSet<>(object.getTags());
         if (tagDTOSet.size() > 0) {

@@ -3,7 +3,6 @@ package com.metao.persoinfo.dto;
 import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonProperty;
 import com.google.common.base.Objects;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.Set;
 
@@ -12,10 +11,10 @@ public class TaskDTO {
   private String id;
   private String title;
   private String notes;
-  private Boolean completed;
-  private Boolean starred;
-  private Boolean important;
-  private Boolean deleted;
+  private boolean completed;
+  private boolean starred;
+  private boolean important;
+  private boolean deleted;
   private Date startDate;
   private Date dueDate;
   private Set<TagDTO> tags;
@@ -95,6 +94,38 @@ public class TaskDTO {
 
   public void setTags(Set<TagDTO> tags) {
     this.tags = tags;
+  }
+
+  public boolean isCompleted() {
+    return completed;
+  }
+
+  public boolean isStarred() {
+    return starred;
+  }
+
+  public boolean isImportant() {
+    return important;
+  }
+
+  public boolean isDeleted() {
+    return deleted;
+  }
+
+  public void setCompleted(boolean completed) {
+    this.completed = completed;
+  }
+
+  public void setStarred(boolean starred) {
+    this.starred = starred;
+  }
+
+  public void setImportant(boolean important) {
+    this.important = important;
+  }
+
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
   }
 
   public Date getStartDate() {
