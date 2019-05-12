@@ -18,7 +18,6 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -103,8 +102,10 @@ public class TaskTest extends BaseTest {
     taskDTO.setDeleted(false);
     taskDTO.setCompleted(false);
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
-    calendar.set(2019, Calendar.MAY, 11);
     taskDTO.setStartDate(new Date());
+    Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
+    calendar.setTime(taskDTO.getStartDate());
+    calendar.add(Calendar.DAY_OF_MONTH, 1);
     taskDTO.setDueDate(calendar.getTime());
     taskDTO.setImportant(false);
     taskDTO.setTags(Sets.newSet(new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232")));
