@@ -1,5 +1,6 @@
 package com.metao.persoinfo.config;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.metao.persoinfo.dto.FilterDTO;
 import com.metao.persoinfo.dto.ObjectFactory;
 import com.metao.persoinfo.entity.Tag;
@@ -7,14 +8,18 @@ import com.metao.persoinfo.entity.Task;
 import com.metao.persoinfo.repository.FilterRepository;
 import com.metao.persoinfo.repository.TagRepository;
 import com.metao.persoinfo.repository.TaskRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Configuration
+@Profile("dev")
 public class DBInitializeConfig {
 
   @Autowired
