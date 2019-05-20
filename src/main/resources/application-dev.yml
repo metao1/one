@@ -1,23 +1,81 @@
 spring:
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: false # we use gulp + BrowserSync for livereload
+  jackson:
+    serialization.indent_output: true
+  messages:
+    cache-duration: 1
+  profiles:
+    active: dev
+    include: swagger
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
-    username: postgres
+    #url: jdbc:postgres://kctyaibl:tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB@isilo.db.elephantsql.com:5432/kctyaib
+    #username: kctyaibl
+    #password: tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB
+    #url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
+    #username: postgres
+    #password: mehrdad
+    url: jdbc:mysql://127.0.0.1:3306/tiny_task?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: mehrdad
     password: mehrdad
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    #database-platform: org.hibernate.dialect.MySQL8InnoDBDialect
-    properties:
+    #url: jdbc:postgresql://c2-54-75-238-138.eu-west-1.compute.amazonaws.com:5432/d1ho51lfnekg9r?sslmode=require&user=wrudfnjaboyuzs&password=30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
+    #username: wrudfnjaboyuzs
+    #password: 30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
+    jpa:
+      #database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+      show-sql: true
+      properties:
+        hibernate:
+          temp:
+            use_jdbc_metadata_defaults: true
+          jdbc:
+            lob:
+              non_contextual_creation: true
       hibernate:
-        temp:
-          use_jdbc_metadata_defaults: true
-        jdbc:
-          lob:
-            non_contextual_creation: true
-    hibernate:
-      ddl-auto: create-drop
-
+        ddl-auto: update
 logging:
   level:
     com.metao.persoinfo: DEBUG
 server:
   port: 8088
+microservice:
+  http:
+    version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  cors:
+    allowed-origins: "*"
+    allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+    allowed-headers: "*"
+    exposed-headers:
+    allow-credentials: true
+    max-age: 1800
+  security:
+    client-authorization:
+      client-id: internal
+      client-secret: internal
+    authentication:
+      jwt:
+        # The secret key should come from a Spring Cloud Config server, and not from this file
+        # If using the "native" profile, it should be located in the "central-config" directory
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+  mail: # specific micromonitor mail property, for standard properties see MailProperties
+    from: micromonitor@localhost
+    base-url: http://127.0.0.1:8761
+  metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+    jmx:
+      enabled: true
+    logs: # Reports Dropwizard metrics in the logs
+      enabled: false
+      report-frequency: 60 # in seconds
+  logging:
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512

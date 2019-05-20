@@ -2,8 +2,7 @@ package com.metao.persoinfo.handler;
 
 import com.metao.persoinfo.controller.TaskController;
 import com.metao.persoinfo.dto.ApiError;
-import com.metao.persoinfo.exception.NotFoundException;
-import com.metao.persoinfo.exception.TaskException;
+import com.metao.persoinfo.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,6 +18,21 @@ public class RestResponseEntityExceptionHandler {
   @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<ApiError> notFoundException(final NotFoundException e) {
     return error(e, HttpStatus.NOT_FOUND, e.getMessage());
+  }
+
+  @ExceptionHandler(EmailAlreadyUsedException.class)
+  public ResponseEntity<ApiError> inUsedException(final NotFoundException e) {
+    return error(e, HttpStatus.IM_USED, e.getMessage());
+  }
+
+  @ExceptionHandler(InvalidPasswordException.class)
+  public ResponseEntity<ApiError> unAuthorizedException(final NotFoundException e) {
+    return error(e, HttpStatus.UNAUTHORIZED, e.getMessage());
+  }
+
+  @ExceptionHandler(LoginAlreadyUsedException.class)
+  public ResponseEntity<ApiError> loginInUsedException(final NotFoundException e) {
+    return error(e, HttpStatus.IM_USED, e.getMessage());
   }
 
   @ExceptionHandler(TaskException.class)

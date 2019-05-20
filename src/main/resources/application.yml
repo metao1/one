@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   datasource:
     #url: jdbc:postgres://kctyaibl:tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB@isilo.db.elephantsql.com:5432/kctyaib
     #username: kctyaibl
