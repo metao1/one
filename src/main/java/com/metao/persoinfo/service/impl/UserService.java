@@ -89,7 +89,7 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByLogin(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
+        userRepository.findOneByEmail(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new LoginAlreadyUsedException();
@@ -106,8 +106,7 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
+        newUser.setName(userDTO.getName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
@@ -137,8 +136,7 @@ public class UserService {
     public User createUser(UserDTO userDTO) {
         User user = new User();
         user.setEmail(userDTO.getEmail().toLowerCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+        user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail().toLowerCase());
         user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
@@ -176,10 +174,9 @@ public class UserService {
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
+            .flatMap(userRepository::findOneByEmail)
             .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
+                user.setName(firstName);
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
@@ -202,8 +199,7 @@ public class UserService {
             .map(user -> {
                 this.clearUserCaches(user);
                 user.setEmail(userDTO.getEmail().toLowerCase());
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
+                user.setName(userDTO.getName());
                 user.setEmail(userDTO.getEmail().toLowerCase());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
@@ -223,7 +219,7 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
-        userRepository.findOneByLogin(login).ifPresent(user -> {
+        userRepository.findOneByEmail(login).ifPresent(user -> {
             userRepository.delete(user);
             this.clearUserCaches(user);
             log.debug("Deleted User: {}", user);
@@ -232,7 +228,7 @@ public class UserService {
 
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
+            .flatMap(userRepository::findOneByEmail)
             .ifPresent(user -> {
                 String currentEncryptedPassword = user.getPassword();
                 if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
@@ -247,12 +243,12 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+        return userRepository.findAllByEmailNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        return userRepository.findOneWithAuthoritiesByLogin(login);
+    public Optional<User> getUserWithAuthoritiesByLoginEmail(String login) {
+        return userRepository.findOneWithAuthoritiesByEmail(login);
     }
 
     @Transactional(readOnly = true)
@@ -262,7 +258,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByEmail);
     }
 
     /**

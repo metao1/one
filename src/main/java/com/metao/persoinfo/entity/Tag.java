@@ -1,19 +1,24 @@
 package com.metao.persoinfo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Tag")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Tag {
 
   @Id
   @ApiModelProperty(notes = "The database generated tag ID")
-  @Column(name="tag_id")
+  @Column(name="id")
   private String id;
 
   private String handle;
@@ -21,19 +26,6 @@ public class Tag {
   private String title;
 
   private String color;
-
-  @ManyToMany(fetch = FetchType.LAZY,
-    cascade = {
-      CascadeType.PERSIST,
-      CascadeType.MERGE
-    },
-    mappedBy = "tags")
-  @JsonIgnoreProperties("tags")
-  private Set<Task> tasks = new HashSet<>();
-
-  public Set<Task> getTasks() {
-    return tasks;
-  }
 
   public String getId() {
     return id;

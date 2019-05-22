@@ -1,10 +1,5 @@
 package com.metao.persoinfo.service.impl;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-import java.util.Properties;
-import javax.mail.internet.MimeMessage;
-
 import com.metao.persoinfo.entity.User;
 import com.metao.persoinfo.properties.PersoInfoProperties;
 import org.slf4j.Logger;
@@ -16,6 +11,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 /**
  * Service for sending emails.

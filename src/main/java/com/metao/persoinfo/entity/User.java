@@ -28,12 +28,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
-  /*@Pattern(regexp = Constants.LOGIN_REGEX)*/
-  @Size(min = 1, max = 50)
-  @Column(length = 50, unique = true, nullable = false)
-  private String name;
-
   @JsonIgnore
   @NotNull
   @Size(min = 60, max = 60)
@@ -41,12 +35,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
   private String password;
 
   @Size(max = 50)
-  @Column(name = "first_name", length = 50)
-  private String firstName;
-
-  @Size(max = 50)
-  @Column(name = "last_name", length = 50)
-  private String lastName;
+  @Column(name = "name", length = 50)
+  private String name;
 
   @Email
   @Size(min = 5, max = 254)
@@ -81,7 +71,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
   @JsonIgnore
   @ManyToMany
   @JoinTable(
-    name = "jhi_user_authority",
+    name = "user_authority",
     joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
     inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
   @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -104,20 +94,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     this.password = password;
   }
 
-  public String getFirstName() {
-    return firstName;
+  public String getName() {
+    return name;
   }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getEmail() {
@@ -203,8 +185,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
   @Override
   public String toString() {
     return "User{" +
-      "  firstName='" + firstName + '\'' +
-      ", lastName='" + lastName + '\'' +
+      "  name='" + name + '\'' +
       ", email='" + email + '\'' +
       ", imageUrl='" + imageUrl + '\'' +
       ", activated='" + activated + '\'' +

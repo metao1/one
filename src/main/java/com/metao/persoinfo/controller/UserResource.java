@@ -58,7 +58,7 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    @Value("${microservice.clientApp.name}")
+    @Value("${micromonitor.clientApp.name}")
     private String applicationName;
 
     private final UserService userService;
@@ -94,7 +94,7 @@ public class UserResource {
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
-        } else if (userRepository.findOneByLogin(userDTO.getEmail().toLowerCase()).isPresent()) {
+        } else if (userRepository.findOneByEmail(userDTO.getEmail().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
@@ -123,7 +123,7 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        existingUser = userRepository.findOneByLogin(userDTO.getEmail().toLowerCase());
+        existingUser = userRepository.findOneByEmail(userDTO.getEmail().toLowerCase());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
@@ -166,7 +166,7 @@ public class UserResource {
     public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
-            userService.getUserWithAuthoritiesByLogin(login)
+            userService.getUserWithAuthoritiesByLoginEmail(login)
                 .map(UserDTO::new));
     }
 

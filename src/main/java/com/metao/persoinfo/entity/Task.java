@@ -1,7 +1,10 @@
 package com.metao.persoinfo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,7 +17,7 @@ public class Task{
 
   @Id
   @ApiModelProperty(notes = "The database generated task ID")
-  @Column(name="task_id")
+  @Column(name="id")
   private String id;
   @ApiModelProperty(notes = "The task title", required = true)
   private String title;
@@ -28,11 +31,14 @@ public class Task{
   private Date startDate;
   private Date dueDate;
 
-  @ManyToMany(fetch = FetchType.LAZY,
-    cascade = {
-      CascadeType.PERSIST,
-      CascadeType.MERGE
-    })
+  @JsonIgnore
+  @ManyToMany
+  @JoinTable(
+    name = "task_tag",
+    joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "id")},
+    inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "id")})
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @BatchSize(size = 20)
   private Set<Tag> tags = new HashSet<>();
 
   public String getId() {

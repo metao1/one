@@ -1,12 +1,13 @@
 package com.metao.persoinfo.dto;
 
-import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
 import java.util.Date;
 import java.util.Set;
 
 public class TaskDTO {
+
   @JsonProperty("id")
   private String id;
   private String title;

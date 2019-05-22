@@ -120,11 +120,11 @@ public class AccountController {
         if (existingUser.isPresent() && (!existingUser.get().getEmail().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
+        Optional<User> user = userRepository.findOneByEmail(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+        userService.updateUser(userDTO.getName(), userDTO.getName(), userDTO.getEmail(),
             userDTO.getLangKey(), userDTO.getImageUrl());
     }
 

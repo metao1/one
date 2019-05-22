@@ -3,26 +3,15 @@ package com.metao.persoinfo.properties;
 
 import com.metao.persoinfo.config.PersoInfoDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.web.cors.CorsConfiguration;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
-@ConfigurationProperties(
-  prefix = "micromonitor",
-  ignoreUnknownFields = false
-)
-@PropertySources({@PropertySource(
-  value = {"classpath:git.properties"},
-  ignoreResourceNotFound = true
-), @PropertySource(
-  value = {"classpath:META-INF/build-info.properties"},
-  ignoreResourceNotFound = true
-)})
+@ConfigurationProperties(prefix = "micromonitor", ignoreUnknownFields = false)
 public class PersoInfoProperties {
+ 
   private final PersoInfoProperties.Async async = new PersoInfoProperties.Async();
   private final PersoInfoProperties.Http http = new PersoInfoProperties.Http();
   private final PersoInfoProperties.Cache cache = new PersoInfoProperties.Cache();
@@ -929,4 +918,3 @@ public class PersoInfoProperties {
     }
   }
 }
-
