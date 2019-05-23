@@ -1,35 +1,3 @@
 spring:
   profiles:
     active: dev
-  datasource:
-    #url: jdbc:postgres://kctyaibl:tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB@isilo.db.elephantsql.com:5432/kctyaib
-    #username: kctyaibl
-    #password: tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB
-    url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
-    username: postgres
-    password: mehrdad
-    #url: jdbc:mysql://127.0.0.1:3306/tiny_task?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    #username: mehrdad
-    #password: mehrdad
-    #url: jdbc:postgresql://c2-54-75-238-138.eu-west-1.compute.amazonaws.com:5432/d1ho51lfnekg9r?sslmode=require&user=wrudfnjaboyuzs&password=30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
-    #username: wrudfnjaboyuzs
-    #password: 30370bfb270a6938afbdd4a548abbba81780f0018a8d511694f1068370439020
-  jpa:
-    #database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: true
-        jdbc:
-          lob:
-            non_contextual_creation: true
-    hibernate:
-      ddl-auto: update
-
-logging:
-  level:
-    com.metao.persoinfo: DEBUG
-server:
-  port: 8088

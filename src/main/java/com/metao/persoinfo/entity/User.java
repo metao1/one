@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * A user.
  */
-@Entity
+@Entity(name = "User")
 @Table(name = "user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable {
@@ -25,8 +25,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Column(name="id")
+  private String id;
 
   @JsonIgnore
   @NotNull
@@ -78,11 +78,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
   @BatchSize(size = 20)
   private Set<Authority> authorities = new HashSet<>();
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 

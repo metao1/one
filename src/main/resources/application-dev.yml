@@ -12,33 +12,32 @@ spring:
     #url: jdbc:postgres://kctyaibl:tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB@isilo.db.elephantsql.com:5432/kctyaib
     #username: kctyaibl
     #password: tjiM044oHzA0d_UIe0eQgd_aUEZFSvpB
-    url: jdbc:postgresql://127.0.0.1:5432/tiny_task?useSSL=false
-    username: postgres
-    password: mehrdad
+    url: jdbc:mysql://localhost:3306/tiny_task?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: Q}`D9z:<v-BMf;H"K3Pmr/qwG
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true
     properties:
       hibernate:
-        ddl-auto: create-drop
-        properties:
-          hibernate.id.new_generator_mappings: true
-          hibernate.connection.provider_disables_autocommit: true
-          hibernate.cache.use_second_level_cache: true
-          hibernate.cache.use_query_cache: false
-          hibernate.generate_statistics: false
-        temp:
-          use_jdbc_metadata_defaults: true
-        jdbc:
-          lob:
-            non_contextual_creation: true
+        #dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        id:
+          new_generator_mappings: false
+        show_sql: true
+        ddl-auto: create
 
 logging:
   level:
     com.metao.persoinfo: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 server:
-  port: 8088
+  port: 8080
 
 micromonitor:
   clientApp:
@@ -49,12 +48,12 @@ micromonitor:
       max-entries: 100 # Number of objects in each cache entry
     # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
   cors:
-      allowed-origins: '*'
-      allowed-methods: '*'
-      allowed-headers: '*'
-      exposed-headers: 'Authorization,Link,X-Total-Count'
-      allow-credentials: true
-      max-age: 1800
+    allowed-origins: '*'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
   security:
     authentication:
       jwt:
@@ -64,10 +63,10 @@ micromonitor:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-      from: jhipsterSampleApplication@localhost
-      base-url: http://127.0.0.1:8080
+    from: jhipsterSampleApplication@localhost
+    base-url: http://127.0.0.1:8080
   metrics:
     logs: # Reports metrics in the logs
-        enabled: false
-        report-frequency: 60 # in seconds
+      enabled: false
+      report-frequency: 60 # in seconds
 
