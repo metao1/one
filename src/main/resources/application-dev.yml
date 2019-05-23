@@ -25,7 +25,7 @@ spring:
           new_generator_mappings: false
         show_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
 
 logging:
   level:
