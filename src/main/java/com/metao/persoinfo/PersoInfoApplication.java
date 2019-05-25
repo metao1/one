@@ -8,10 +8,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, PersoInfoProperties.class})
-public class TinyTaskApplication {
+public class PersoInfoApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(TinyTaskApplication.class, args);
+    SpringApplication.run(PersoInfoApplication.class, args);
   }
 
 }

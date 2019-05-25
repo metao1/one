@@ -1,6 +1,7 @@
 package com.metao.persoinfo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.metao.persoinfo.util.Constants;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -25,8 +26,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @Column(name="id")
-  private String id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
   @JsonIgnore
   @NotNull
@@ -78,11 +80,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
   @BatchSize(size = 20)
   private Set<Authority> authorities = new HashSet<>();
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -155,6 +157,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
   }
 
   public void setLangKey(String langKey) {
+    if (langKey == null) {
+      langKey = Constants.DEFAULT_LANGUAGE;
+    }
     this.langKey = langKey;
   }
 

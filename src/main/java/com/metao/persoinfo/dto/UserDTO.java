@@ -1,5 +1,6 @@
 package com.metao.persoinfo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.metao.persoinfo.entity.Authority;
 import com.metao.persoinfo.entity.User;
 
@@ -15,145 +16,157 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    private String id;
+  private Long id;
 
-    @Size(max = 50)
-    private String name;
+  @Size(max = 50)
+  private String name;
 
-    @Email
-    @NotBlank
-    @Size(min = 5, max = 254)
-    private String email;
+  @Email
+  @NotBlank
+  @Size(min = 5, max = 254)
+  private String email;
 
-    @Size(max = 256)
-    private String imageUrl;
+  @Size(max = 256)
+  private String imageUrl;
 
-    private boolean activated = false;
+  private boolean activated = false;
 
-    @Size(min = 2, max = 6)
-    private String langKey;
+  @Size(min = 2, max = 6)
+  private String langKey;
 
-    private Instant createdDate;
+  @JsonProperty("created_by")
+  private String createdBy;
 
-    private String lastModifiedBy;
+  private Instant createdDate;
 
-    private Instant lastModifiedDate;
+  private String lastModifiedBy;
 
-    private Set<String> authorities;
+  private Instant lastModifiedDate;
 
-    public UserDTO() {
-        // Empty constructor needed for Jackson.
-    }
+  private Set<String> authorities;
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.activated = user.getActivated();
-        this.imageUrl = user.getImageUrl();
-        this.langKey = user.getLangKey();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream()
-            .map(Authority::getName)
-            .collect(Collectors.toSet());
-    }
+  public UserDTO() {
+    // Empty constructor needed for Jackson.
+  }
 
-    public String getId() {
-        return id;
-    }
+  public UserDTO(User user) {
+    this.id = user.getId();
+    this.email = user.getEmail();
+    this.name = user.getName();
+    this.email = user.getEmail();
+    this.activated = user.getActivated();
+    this.createdBy = user.getCreatedBy();
+    this.imageUrl = user.getImageUrl();
+    this.langKey = user.getLangKey();
+    this.createdDate = user.getCreatedDate();
+    this.lastModifiedBy = user.getLastModifiedBy();
+    this.lastModifiedDate = user.getLastModifiedDate();
+    this.authorities = user.getAuthorities().stream()
+      .map(Authority::getName)
+      .collect(Collectors.toSet());
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
-    public boolean isActivated() {
-        return activated;
-    }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
+  public boolean isActivated() {
+    return activated;
+  }
 
-    public String getLangKey() {
-        return langKey;
-    }
+  public void setActivated(boolean activated) {
+    this.activated = activated;
+  }
 
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
+  public String getLangKey() {
+    return langKey;
+  }
 
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
+  public void setLangKey(String langKey) {
+    this.langKey = langKey;
+  }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
+  public Instant getCreatedDate() {
+    return createdDate;
+  }
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+  public void setCreatedDate(Instant createdDate) {
+    this.createdDate = createdDate;
+  }
 
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+  public String getLastModifiedBy() {
+    return lastModifiedBy;
+  }
 
-    public Set<String> getAuthorities() {
-        return authorities;
-    }
+  public void setLastModifiedBy(String lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
-    }
+  public Instant getLastModifiedDate() {
+    return lastModifiedDate;
+  }
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "email='" + email + '\'' +
-            ", name='" + name + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
-    }
+  public void setLastModifiedDate(Instant lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
+
+  public Set<String> getAuthorities() {
+    return authorities;
+  }
+
+  public void setAuthorities(Set<String> authorities) {
+    this.authorities = authorities;
+  }
+
+  @Override
+  public String toString() {
+    return "UserDTO{" +
+      "email='" + email + '\'' +
+      ", name='" + name + '\'' +
+      ", email='" + email + '\'' +
+      ", imageUrl='" + imageUrl + '\'' +
+      ", activated=" + activated +
+      ", langKey='" + langKey + '\'' +
+      ", createdDate=" + createdDate +
+      ", lastModifiedBy='" + lastModifiedBy + '\'' +
+      ", lastModifiedDate=" + lastModifiedDate +
+      ", authorities=" + authorities +
+      "}";
+  }
 }

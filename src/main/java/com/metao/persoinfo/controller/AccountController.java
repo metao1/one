@@ -5,6 +5,7 @@ import com.metao.persoinfo.dto.ManagedUserVM;
 import com.metao.persoinfo.dto.PasswordChangeDTO;
 import com.metao.persoinfo.dto.UserDTO;
 import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.exception.AccountResourceException;
 import com.metao.persoinfo.exception.EmailAlreadyUsedException;
 import com.metao.persoinfo.exception.EmailNotFoundException;
 import com.metao.persoinfo.exception.InvalidPasswordException;
@@ -28,12 +29,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class AccountController {
-
-    private static class AccountResourceException extends RuntimeException {
-        private AccountResourceException(String message) {
-            super(message);
-        }
-    }
 
     private final Logger log = LoggerFactory.getLogger(AccountController.class);
 
@@ -64,7 +59,7 @@ public class AccountController {
             throw new InvalidPasswordException();
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+        //mailService.sendActivationEmail(user);
     }
 
     /**

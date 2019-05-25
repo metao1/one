@@ -89,26 +89,18 @@ public class UserService {
   }
 
   public User registerUser(UserDTO userDTO, String password) {
-    userRepository.findOneByEmail(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
+    userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
       boolean removed = removeNonActivatedUser(existingUser);
       if (!removed) {
         throw new LoginAlreadyUsedException();
       }
     });
-    userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
-      boolean removed = removeNonActivatedUser(existingUser);
-      if (!removed) {
-        throw new EmailAlreadyUsedException();
-      }
-    });
     User newUser = new User();
     String encryptedPassword = passwordEncoder.encode(password);
-    newUser.setId(UUID.randomUUID().toString());
     newUser.setEmail(userDTO.getEmail().toLowerCase());
     // new user gets initially a generated password
     newUser.setPassword(encryptedPassword);
     newUser.setName(userDTO.getName());
-    newUser.setEmail(userDTO.getEmail().toLowerCase());
     newUser.setImageUrl(userDTO.getImageUrl());
     newUser.setLangKey(userDTO.getLangKey());
     // new user is not active
@@ -136,7 +128,7 @@ public class UserService {
 
   public User createUser(UserDTO userDTO) {
     User user = new User();
-    user.setId(UUID.randomUUID().toString());
+
     user.setEmail(userDTO.getEmail().toLowerCase());
     user.setName(userDTO.getName());
     user.setEmail(userDTO.getEmail().toLowerCase());

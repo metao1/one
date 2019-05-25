@@ -39,6 +39,7 @@ repositories {   // repositories for Jar's you access in your code
 dependencies {
   implementation 'org.springframework.boot:spring-boot-configuration-processor'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-actuator:2.1.5.RELEASE'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-hateoas'
   implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -60,6 +61,9 @@ dependencies {
   implementation 'org.ehcache:ehcache:3.7.1'
   implementation 'javax.cache:cache-api'
   implementation 'org.hibernate:hibernate-jcache'
+
+  //liquibase
+  implementation 'org.liquibase:liquibase-core'
 
   //jwt token provider
   implementation 'io.jsonwebtoken:jjwt-api:0.10.5'

@@ -40,6 +40,12 @@ public class RestResponseEntityExceptionHandler {
     return error(e, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
   }
 
+
+  @ExceptionHandler(AccountResourceException.class)
+  public ResponseEntity<ApiError> accountResourceNotFoundExceptionHandler(final TaskException e) {
+    return error(e, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+  }
+
   private ResponseEntity<ApiError> error(final Exception exception, final HttpStatus httpStatus, final String logRef) {
     final String message = Optional.of(exception.getMessage()).orElse(exception.getClass().getSimpleName());
     return new ResponseEntity<>(new ApiError(httpStatus, message), httpStatus);
