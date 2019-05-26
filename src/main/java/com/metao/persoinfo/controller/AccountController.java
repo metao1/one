@@ -1,7 +1,7 @@
 package com.metao.persoinfo.controller;
 
-import com.metao.persoinfo.dto.KeyAndPasswordVM;
-import com.metao.persoinfo.dto.ManagedUserVM;
+import com.metao.persoinfo.dto.KeyAndPasswordDTO;
+import com.metao.persoinfo.dto.ManagedUserDTO;
 import com.metao.persoinfo.dto.PasswordChangeDTO;
 import com.metao.persoinfo.dto.UserDTO;
 import com.metao.persoinfo.entity.User;
@@ -48,17 +48,17 @@ public class AccountController {
     /**
      * {@code POST  /register} : register the user.
      *
-     * @param managedUserVM the managed user View Model.
+     * @param managedUserDTO the managed user View Model.
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
+    public void registerAccount(@Valid @RequestBody ManagedUserDTO managedUserDTO) {
+        if (!checkPasswordLength(managedUserDTO.getPassword())) {
             throw new InvalidPasswordException();
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        User user = userService.registerUser(managedUserDTO, managedUserDTO.getPassword());
         //mailService.sendActivationEmail(user);
     }
 
@@ -159,7 +159,7 @@ public class AccountController {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
-    public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+    public void finishPasswordReset(@RequestBody KeyAndPasswordDTO keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
@@ -173,7 +173,7 @@ public class AccountController {
 
     private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) &&
-            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+            password.length() >= ManagedUserDTO.PASSWORD_MIN_LENGTH &&
+            password.length() <= ManagedUserDTO.PASSWORD_MAX_LENGTH;
     }
 }

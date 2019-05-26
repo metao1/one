@@ -3,7 +3,7 @@ package com.metao.persoinfo.dto;
 /**
  * View Model object for storing the user's key and password.
  */
-public class KeyAndPasswordVM {
+public class KeyAndPasswordDTO {
 
     private String key;
 

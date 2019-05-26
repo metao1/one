@@ -34,7 +34,7 @@ public class DBInitializeConfig {
   @Autowired
   ObjectFactory objectFactory;
 
-  /*@PostConstruct
+  @PostConstruct
   public void initialize() {
     Set<Tag> tags = new HashSet<>();
     Tag tag1 = new Tag();
@@ -49,6 +49,7 @@ public class DBInitializeConfig {
     tag2.setColor("#723f32");
     tag2.setHandle("frontend");
 
+    tagRepository.save(tag1);
     tagRepository.save(tag2);
 
     Task task = new Task();
@@ -73,7 +74,7 @@ public class DBInitializeConfig {
     for (FilterDTO filter : filterList) {
       filterRepository.save(objectFactory.buildFilter(filter));
     }
-  }*/
+  }
 }
 
 

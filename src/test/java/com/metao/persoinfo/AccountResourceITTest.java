@@ -1,8 +1,8 @@
 package com.metao.persoinfo;
 
 import com.metao.persoinfo.controller.AccountController;
-import com.metao.persoinfo.dto.KeyAndPasswordVM;
-import com.metao.persoinfo.dto.ManagedUserVM;
+import com.metao.persoinfo.dto.KeyAndPasswordDTO;
+import com.metao.persoinfo.dto.ManagedUserDTO;
 import com.metao.persoinfo.dto.PasswordChangeDTO;
 import com.metao.persoinfo.dto.UserDTO;
 import com.metao.persoinfo.entity.Authority;
@@ -155,7 +155,7 @@ public class AccountResourceITTest {
   @Test
   @Transactional
   public void testRegisterValid() throws Exception {
-    ManagedUserVM validUser = new ManagedUserVM();
+    ManagedUserDTO validUser = new ManagedUserDTO();
     validUser.setName("test-register-valid");
 
     validUser.setPassword("password");
@@ -177,7 +177,7 @@ public class AccountResourceITTest {
   @Test
   @Transactional
   public void testRegisterInvalidLogin() throws Exception {
-    ManagedUserVM invalidUser = new ManagedUserVM();
+    ManagedUserDTO invalidUser = new ManagedUserDTO();
     invalidUser.setName("funky-log!n");
     invalidUser.setPassword("password");
 
@@ -200,7 +200,7 @@ public class AccountResourceITTest {
   @Test
   @Transactional
   public void testRegisterInvalidEmail() throws Exception {
-    ManagedUserVM invalidUser = new ManagedUserVM();
+    ManagedUserDTO invalidUser = new ManagedUserDTO();
     invalidUser.setName("bob");
 
     invalidUser.setPassword("password");
@@ -223,7 +223,7 @@ public class AccountResourceITTest {
   @Test
   @Transactional
   public void testRegisterInvalidPassword() throws Exception {
-    ManagedUserVM invalidUser = new ManagedUserVM();
+    ManagedUserDTO invalidUser = new ManagedUserDTO();
     invalidUser.setName("bob");
 
     invalidUser.setPassword("123");// password with only 3 digits
@@ -246,7 +246,7 @@ public class AccountResourceITTest {
   @Test
   @Transactional
   public void testRegisterNullPassword() throws Exception {
-    ManagedUserVM invalidUser = new ManagedUserVM();
+    ManagedUserDTO invalidUser = new ManagedUserDTO();
 
     invalidUser.setName("bob");
     invalidUser.setPassword(null);// invalid null password
@@ -270,7 +270,7 @@ public class AccountResourceITTest {
   @Transactional
   public void testRegisterDuplicateLogin() throws Exception {
     // First registration
-    ManagedUserVM firstUser = new ManagedUserVM();
+    ManagedUserDTO firstUser = new ManagedUserDTO();
     firstUser.setName("alice");
 
     firstUser.setPassword("password");
@@ -280,7 +280,7 @@ public class AccountResourceITTest {
     firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
     // Duplicate login, different email
-    ManagedUserVM secondUser = new ManagedUserVM();
+    ManagedUserDTO secondUser = new ManagedUserDTO();
     secondUser.setName(firstUser.getName());
     secondUser.setPassword(firstUser.getPassword());
     secondUser.setEmail("alice2@example.com");
@@ -322,7 +322,7 @@ public class AccountResourceITTest {
   @Transactional
   public void testRegisterDuplicateEmail() throws Exception {
     // First user
-    ManagedUserVM firstUser = new ManagedUserVM();
+    ManagedUserDTO firstUser = new ManagedUserDTO();
     firstUser.setName("test-register-duplicate-email");
 
     firstUser.setPassword("password");
@@ -342,7 +342,7 @@ public class AccountResourceITTest {
     assertThat(testUser1.isPresent()).isTrue();
 
     // Duplicate email, different login
-    ManagedUserVM secondUser = new ManagedUserVM();
+    ManagedUserDTO secondUser = new ManagedUserDTO();
     secondUser.setName("test-register-duplicate-email-2");
     secondUser.setPassword(firstUser.getPassword());
     secondUser.setEmail(firstUser.getEmail());
@@ -364,7 +364,7 @@ public class AccountResourceITTest {
     assertThat(testUser3.isPresent()).isTrue();
 
     // Duplicate email - with uppercase email address
-    ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
+    ManagedUserDTO userWithUpperCaseEmail = new ManagedUserDTO();
     userWithUpperCaseEmail.setId(firstUser.getId());
     userWithUpperCaseEmail.setName("test-register-duplicate-email-3");
     userWithUpperCaseEmail.setPassword(firstUser.getPassword());
@@ -399,7 +399,7 @@ public class AccountResourceITTest {
   @Test
   @Transactional
   public void testRegisterAdminIsIgnored() throws Exception {
-    ManagedUserVM validUser = new ManagedUserVM();
+    ManagedUserDTO validUser = new ManagedUserDTO();
 
     validUser.setName("badguy");
     validUser.setPassword("password");
@@ -635,7 +635,7 @@ public class AccountResourceITTest {
     user.setEmail("change-password-too-small@example.com");
     userRepository.saveAndFlush(user);
 
-    String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
+    String newPassword = RandomStringUtils.random(ManagedUserDTO.PASSWORD_MIN_LENGTH - 1);
 
     restMvc.perform(post("/api/account/change-password")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -657,7 +657,7 @@ public class AccountResourceITTest {
     user.setEmail("change-password-too-long@example.com");
     userRepository.saveAndFlush(user);
 
-    String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
+    String newPassword = RandomStringUtils.random(ManagedUserDTO.PASSWORD_MAX_LENGTH + 1);
 
     restMvc.perform(post("/api/account/change-password")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -740,7 +740,7 @@ public class AccountResourceITTest {
     user.setResetKey("reset key");
     userRepository.saveAndFlush(user);
 
-    KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
+    KeyAndPasswordDTO keyAndPassword = new KeyAndPasswordDTO();
     keyAndPassword.setKey(user.getResetKey());
     keyAndPassword.setNewPassword("new password");
 
@@ -766,7 +766,7 @@ public class AccountResourceITTest {
     user.setResetKey("reset key too small");
     userRepository.saveAndFlush(user);
 
-    KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
+    KeyAndPasswordDTO keyAndPassword = new KeyAndPasswordDTO();
     keyAndPassword.setKey(user.getResetKey());
     keyAndPassword.setNewPassword("foo");
 
@@ -784,7 +784,7 @@ public class AccountResourceITTest {
   @Test
   @Transactional
   public void testFinishPasswordResetWrongKey() throws Exception {
-    KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
+    KeyAndPasswordDTO keyAndPassword = new KeyAndPasswordDTO();
     keyAndPassword.setKey("wrong reset key");
     keyAndPassword.setNewPassword("new password");
 

@@ -33,7 +33,7 @@ spring:
        hibernate.cache.use_query_cache: false
        hibernate.generate_statistics: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
   liquibase:
     contexts: prod
 
