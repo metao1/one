@@ -34,8 +34,8 @@ spring:
        hibernate.generate_statistics: false
     hibernate:
       ddl-auto: create
-  liquibase:
-    contexts: prod
+  #liquibase:
+    #contexts: prod
 
 logging:
   level:
