@@ -2,6 +2,7 @@ package com.metao.persoinfo;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.metao.persoinfo.dto.*;
+import com.metao.persoinfo.service.impl.TagService;
 import com.metao.persoinfo.service.impl.TaskService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -35,6 +36,9 @@ public class TaskTest extends BaseTest {
 
   @Autowired
   private TaskService taskService;
+
+  @Autowired
+  private TagService tagService;
 
   @Test
   public void getAllTasks() throws Exception {

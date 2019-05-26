@@ -3,7 +3,6 @@ package com.metao.persoinfo.service.impl;
 import com.metao.persoinfo.dto.UserDTO;
 import com.metao.persoinfo.entity.Authority;
 import com.metao.persoinfo.entity.User;
-import com.metao.persoinfo.exception.EmailAlreadyUsedException;
 import com.metao.persoinfo.exception.InvalidPasswordException;
 import com.metao.persoinfo.exception.LoginAlreadyUsedException;
 import com.metao.persoinfo.repository.AuthorityRepository;
@@ -90,10 +89,7 @@ public class UserService {
 
   public User registerUser(UserDTO userDTO, String password) {
     userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
-      boolean removed = removeNonActivatedUser(existingUser);
-      if (!removed) {
-        throw new LoginAlreadyUsedException();
-      }
+      throw new LoginAlreadyUsedException();
     });
     User newUser = new User();
     String encryptedPassword = passwordEncoder.encode(password);
@@ -160,17 +156,16 @@ public class UserService {
   /**
    * Update basic information (first name, last name, email, language) for the current user.
    *
-   * @param firstName first name of user.
-   * @param lastName  last name of user.
+   * @param name first name of user.
    * @param email     email id of user.
    * @param langKey   language key.
    * @param imageUrl  image URL of user.
    */
-  public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+  public void updateUser(String name, String email, String langKey, String imageUrl) {
     SecurityUtils.getCurrentUserLogin()
       .flatMap(userRepository::findOneByEmail)
       .ifPresent(user -> {
-        user.setName(firstName);
+        user.setName(name);
         user.setEmail(email.toLowerCase());
         user.setLangKey(langKey);
         user.setImageUrl(imageUrl);

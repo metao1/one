@@ -20,9 +20,12 @@ public class TaskService implements GeneralService<TaskDTO> {
 
   private final ObjectFactory objectFactory;
 
-  public TaskService(TaskRepository taskRepository, ObjectFactory objectFactory) {
+  private final TagService tagService;
+
+  public TaskService(TaskRepository taskRepository, ObjectFactory objectFactory, TagService tagService) {
     this.taskRepository = taskRepository;
     this.objectFactory = objectFactory;
+    this.tagService = tagService;
   }
 
   @Override
@@ -37,6 +40,11 @@ public class TaskService implements GeneralService<TaskDTO> {
     if (object.getTags() != null) {//remove duplicates
       Set<TagDTO> tagDTOSet = new HashSet<>(object.getTags());
       if (tagDTOSet.size() > 0) {
+        object.getTags().forEach(tagDTO -> {
+          if (!tagService.isModelExist(tagDTO)) {
+            tagService.saveOrUpdateModel(tagDTO);
+          }
+        });
         object.setTags(Sets.newConcurrentHashSet(tagDTOSet));
       }
     }
