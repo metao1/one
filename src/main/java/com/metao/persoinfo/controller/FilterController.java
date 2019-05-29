@@ -36,7 +36,7 @@ public class FilterController {
   @GetMapping
   @ApiOperation(value = "View a list of available filters")
   public ResponseEntity<ResponseMap<List<FilterDTO>>> getFilterDTOs() {
-    ResponseMap<List<FilterDTO>> filters = new ResponseMap<>("filters", filterService.getModels());
+    ResponseMap<List<FilterDTO>> filters = new ResponseMap<>("filters", filterService.getModels(""));
     if (filters.getResponse().isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

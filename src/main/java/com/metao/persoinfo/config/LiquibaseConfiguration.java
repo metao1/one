@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import java.util.concurrent.Executor;
 
 
-@Configuration
+//@Configuration
 public class LiquibaseConfiguration {
 
   private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);

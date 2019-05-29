@@ -2,7 +2,7 @@ package com.metao.persoinfo.controller;
 
 import com.metao.persoinfo.dto.UserDTO;
 import com.metao.persoinfo.entity.User;
-import com.metao.persoinfo.exception.BadRequestAlertException;
+import com.metao.persoinfo.exception.BadRequestException;
 import com.metao.persoinfo.exception.EmailAlreadyUsedException;
 import com.metao.persoinfo.exception.LoginAlreadyUsedException;
 import com.metao.persoinfo.repository.UserRepository;
@@ -84,7 +84,7 @@ public class UserResource {
      * @param userDTO the user to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
-     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
+     * @throws BadRequestException {@code 400 (Bad Request)} if the login or email is already in use.
      */
     @PostMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
@@ -92,7 +92,7 @@ public class UserResource {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
-            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
+            throw new BadRequestException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
         } else if (userRepository.findOneByEmail(userDTO.getEmail().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();

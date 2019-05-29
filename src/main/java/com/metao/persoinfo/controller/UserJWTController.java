@@ -5,7 +5,6 @@ import com.metao.persoinfo.config.JWTFilter;
 import com.metao.persoinfo.config.TokenProvider;
 import com.metao.persoinfo.dto.LoginVM;
 import com.metao.persoinfo.exception.InvalidPasswordException;
-import com.metao.persoinfo.util.SecurityUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

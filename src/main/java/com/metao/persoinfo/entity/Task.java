@@ -5,6 +5,7 @@ import com.google.common.base.Objects;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,7 +22,7 @@ public class Task{
   private String id;
   @ApiModelProperty(notes = "The task title", required = true)
   private String title;
-  @ApiModelProperty(notes = "The task notes", required = false)
+  @ApiModelProperty(notes = "The task notes")
   private String notes;
   @ApiModelProperty(notes = "The task description", required = true)
   private Boolean completed;
@@ -30,6 +31,8 @@ public class Task{
   private Boolean deleted;
   private Date startDate;
   private Date dueDate;
+  @NonNull
+  private String username;
 
   @JsonIgnore
   @ManyToMany
@@ -121,6 +124,14 @@ public class Task{
     this.dueDate = dueDate;
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -136,8 +147,18 @@ public class Task{
 
   @Override
   public String toString() {
-    return "Task [id=" + id + ", title=" + title + ", completed=" + completed + "]";
+    return "Task{" +
+      "id='" + id + '\'' +
+      ", title='" + title + '\'' +
+      ", notes='" + notes + '\'' +
+      ", completed=" + completed +
+      ", starred=" + starred +
+      ", important=" + important +
+      ", deleted=" + deleted +
+      ", startDate=" + startDate +
+      ", dueDate=" + dueDate +
+      ", username='" + username + '\'' +
+      ", tags=" + tags +
+      '}';
   }
-
-
 }

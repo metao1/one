@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Getter
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class BadRequestAlertException extends RuntimeException {
+public class BadRequestException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
@@ -19,11 +19,11 @@ public class BadRequestAlertException extends RuntimeException {
 
   private final String errorKey;
 
-  public BadRequestAlertException(String defaultMessage, String entityName, String errorKey) {
+  public BadRequestException(String defaultMessage, String entityName, String errorKey) {
     this(ErrorConstants.DEFAULT_TYPE, defaultMessage, entityName, errorKey);
   }
 
-  public BadRequestAlertException(URI type, String defaultMessage, String entityName, String errorKey) {
+  public BadRequestException(URI type, String defaultMessage, String entityName, String errorKey) {
     super(defaultMessage);
     this.entityName = entityName;
     this.errorKey = errorKey;

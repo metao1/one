@@ -44,7 +44,7 @@ public class FilterService implements GeneralService<FilterDTO> {
   }
 
   @Override
-  public List<FilterDTO> getModels() {
+  public List<FilterDTO> getModels(String username) {
     List<Filter> filterList = filterRepository.findAll();
     List<FilterDTO> filterDTOList = new ArrayList<>();
     filterList

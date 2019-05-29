@@ -3,20 +3,23 @@ package com.metao.persoinfo.config;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.metao.persoinfo.dto.FilterDTO;
 import com.metao.persoinfo.dto.ObjectFactory;
+import com.metao.persoinfo.entity.Authority;
 import com.metao.persoinfo.entity.Tag;
 import com.metao.persoinfo.entity.Task;
+import com.metao.persoinfo.entity.User;
 import com.metao.persoinfo.repository.FilterRepository;
 import com.metao.persoinfo.repository.TagRepository;
 import com.metao.persoinfo.repository.TaskRepository;
+import com.metao.persoinfo.repository.UserRepository;
+import com.metao.persoinfo.util.AuthoritiesConstants;
+import com.metao.persoinfo.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Configuration
 @Profile("dev")
@@ -33,6 +36,12 @@ public class DBInitializeConfig {
 
   @Autowired
   ObjectFactory objectFactory;
+
+  @Autowired
+  UserRepository userRepository;
+
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
   @PostConstruct
   public void initialize() {
@@ -61,6 +70,7 @@ public class DBInitializeConfig {
     task.setStarred(false);
     task.setImportant(false);
     task.setTags(tags);
+    task.setUsername("mal@gmail.com");
     task.setCompleted(false);
     taskRepository.save(task);
 
@@ -74,6 +84,19 @@ public class DBInitializeConfig {
     for (FilterDTO filter : filterList) {
       filterRepository.save(objectFactory.buildFilter(filter));
     }
+    String encryptedPassword = passwordEncoder.encode("mehrdad");
+
+    User user = new User();
+    user.setName("mal");
+    user.setPassword(encryptedPassword);
+    user.setEmail("mal@gmail.com");
+    user.setActivated(true);
+    user.setImageUrl("http://placehold.it/50x50");
+    user.setLangKey(Constants.DEFAULT_LANGUAGE);
+    Authority authority = new Authority();
+    authority.setName(AuthoritiesConstants.USER);
+    user.setAuthorities(Collections.singleton(authority));
+    userRepository.saveAndFlush(user);
   }
 }
 

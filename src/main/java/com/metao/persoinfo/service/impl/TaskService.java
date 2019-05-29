@@ -5,10 +5,12 @@ import com.metao.persoinfo.dto.ObjectFactory;
 import com.metao.persoinfo.dto.TagDTO;
 import com.metao.persoinfo.dto.TaskDTO;
 import com.metao.persoinfo.entity.Task;
+import com.metao.persoinfo.exception.InvalidLoginException;
 import com.metao.persoinfo.exception.NotFoundException;
 import com.metao.persoinfo.exception.TaskException;
 import com.metao.persoinfo.repository.TaskRepository;
 import com.metao.persoinfo.service.GeneralService;
+import com.metao.persoinfo.util.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -48,9 +50,15 @@ public class TaskService implements GeneralService<TaskDTO> {
         object.setTags(Sets.newConcurrentHashSet(tagDTOSet));
       }
     }
-    Task task = objectFactory.buildTask(object);
-    Task savedTask = taskRepository.save(task);
-    return objectFactory.buildTask(savedTask);
+    Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+    if (currentUserLogin.isPresent()) {
+      Task task = objectFactory.buildTask(object);
+      task.setUsername(currentUserLogin.get());
+      Task savedTask = taskRepository.save(task);
+      return objectFactory.buildTask(savedTask);
+    } else {
+      throw new InvalidLoginException();
+    }
   }
 
   @Override
@@ -67,13 +75,14 @@ public class TaskService implements GeneralService<TaskDTO> {
   }
 
   @Override
-  public List<TaskDTO> getModels() {
+  public List<TaskDTO> getModels(String username) {
     List<Task> taskList = taskRepository.findAll();
     List<TaskDTO> taskDTOList = new ArrayList<>();
     taskList
       .stream()
       .filter(Objects::nonNull)
       .filter(s -> s.getId() != null)
+      .filter(s -> s.getUsername().equalsIgnoreCase(username))
       .forEach(task -> {
         TaskDTO taskDTO = objectFactory.buildTask(task);
         taskDTOList.add(taskDTO);

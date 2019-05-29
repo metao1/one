@@ -14,7 +14,7 @@ public interface GeneralService<T> {
 
   public void removeModel(String id);
 
-  public List<T> getModels();
+  List<T> getModels(String username);
 
   public boolean isModelExist(T object);
 
