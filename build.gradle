@@ -62,9 +62,6 @@ dependencies {
   implementation 'javax.cache:cache-api'
   implementation 'org.hibernate:hibernate-jcache'
 
-  //liquibase
-  implementation 'org.liquibase:liquibase-core'
-
   //jwt token provider
   implementation 'io.jsonwebtoken:jjwt-api:0.10.5'
   runtime 'io.jsonwebtoken:jjwt-impl:0.10.5'
