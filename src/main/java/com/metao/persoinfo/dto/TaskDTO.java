@@ -18,6 +18,7 @@ public class TaskDTO {
   private boolean deleted;
   private Date startDate;
   private Date dueDate;
+  private String username;//the username who owns the task
   private Set<TagDTO> tags;
 
   @Override
@@ -25,7 +26,7 @@ public class TaskDTO {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     TaskDTO taskDTO = (TaskDTO) o;
-    return Objects.equal(id, taskDTO.id);
+    return Objects.equal(id, taskDTO.id) && Objects.equal(username, taskDTO.username);
   }
 
   @Override
@@ -143,5 +144,13 @@ public class TaskDTO {
 
   public void setDueDate(Date dueDate) {
     this.dueDate = dueDate;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 }

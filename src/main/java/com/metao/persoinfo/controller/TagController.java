@@ -36,7 +36,7 @@ public class TagController {
   @GetMapping
   @ApiOperation(value = "View a list of available tags")
   public ResponseEntity<ResponseMap<List<TagDTO>>> getTagDTOs() {
-    ResponseMap<List<TagDTO>> tags = new ResponseMap<>("tags", tagService.getModels());
+    ResponseMap<List<TagDTO>> tags = new ResponseMap<>("tags", tagService.getModels(""));
     if (tags.getResponse().isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

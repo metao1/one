@@ -40,6 +40,10 @@ public class RestResponseEntityExceptionHandler {
     return error(e, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
   }
 
+  @ExceptionHandler(InvalidLoginException.class)
+  public ResponseEntity<ApiError> invalidLoginExceptionHandler(final TaskException e) {
+    return error(e, HttpStatus.UNAUTHORIZED, e.getMessage());
+  }
 
   @ExceptionHandler(AccountResourceException.class)
   public ResponseEntity<ApiError> accountResourceNotFoundExceptionHandler(final TaskException e) {

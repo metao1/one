@@ -44,7 +44,7 @@ public class TagService implements GeneralService<TagDTO> {
   }
 
   @Override
-  public List<TagDTO> getModels() {
+  public List<TagDTO> getModels(String username) {
     List<Tag> tagList = tagRepository.findAll();
     List<TagDTO> tagDTOList = new ArrayList<>();
     tagList

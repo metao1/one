@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class LoginAlreadyUsedException extends BadRequestAlertException {
+public class LoginAlreadyUsedException extends BadRequestException {
 
     private static final long serialVersionUID = 1L;
 
