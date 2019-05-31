@@ -30,6 +30,7 @@ public class TagTest extends BaseTest {
   @Test
   public void getAllTags() throws Exception {
     this.mvc.perform(get(BASE_URL)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andExpect(status().is2xxSuccessful())
       .andDo(print())
@@ -49,6 +50,7 @@ public class TagTest extends BaseTest {
     BASE_URL += "tag/";
     if (tagDTO == null) {
       this.mvc.perform(get(BASE_URL)
+        .header("Authorization", "Bearer " + JWT)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(status().is2xxSuccessful())
         .andDo(print())
@@ -71,6 +73,7 @@ public class TagTest extends BaseTest {
   @Test
   public void getOneTag() throws Exception {
     this.mvc.perform(get(BASE_URL + tagDTO.getId())
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andExpect(status().isOk())
       .andDo(print())

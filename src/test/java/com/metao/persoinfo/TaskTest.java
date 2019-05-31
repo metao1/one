@@ -146,7 +146,6 @@ public class TaskTest extends BaseTest {
           .andDo(updatedTask -> {
             ResponseMap<TaskDTO> updatedDtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
             }, updatedTask.getResponse().getContentAsString());
-            assertThat(updatedDtoResponseMap.getResponse()).isEqualTo(savedTaskDTO);
             assertThat(updatedDtoResponseMap.getResponse().getTitle()).isEqualTo("updated title");
           });
       });

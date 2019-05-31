@@ -30,6 +30,7 @@ public class FilterTest extends BaseTest {
   @Test
   public void getAllFilters() throws Exception {
     this.mvc.perform(get(BASE_URL)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andExpect(status().is2xxSuccessful())
       .andDo(print())
@@ -49,7 +50,8 @@ public class FilterTest extends BaseTest {
     BASE_URL += "filter/";
     if (filterDTO == null) {
       this.mvc.perform(get(BASE_URL)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .header("Authorization", "Bearer " + JWT))
         .andExpect(status().is2xxSuccessful())
         .andDo(print())
         .andExpect(jsonPath("$.message").exists())
@@ -71,6 +73,7 @@ public class FilterTest extends BaseTest {
   @Test
   public void getOneFilter() throws Exception {
     this.mvc.perform(get(BASE_URL + filterDTO.getId())
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andExpect(status().isOk())
       .andDo(print())
@@ -88,6 +91,7 @@ public class FilterTest extends BaseTest {
   @Test
   public void deleteFilterTest() throws Exception {
     this.mvc.perform(delete(BASE_URL + filterDTO.getId())
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andDo(print())
       .andExpect(status().is2xxSuccessful());
@@ -96,6 +100,7 @@ public class FilterTest extends BaseTest {
   @Test
   public void deleteFilterFailedTest() throws Exception {
     this.mvc.perform(delete(BASE_URL + filterDTO.getId())
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andDo(print())
       .andExpect(status().isNotFound());

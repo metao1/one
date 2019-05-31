@@ -147,6 +147,7 @@ public class AccountResourceTest {
   public void testRegisterValid() throws Exception {
     ManagedUserDTO validUser = new ManagedUserDTO();
     validUser.setName("test-register-valid");
+    validUser.setId(10000L);
     validUser.setPassword("password");
     validUser.setEmail("test-register-valid@example.com");
     validUser.setImageUrl("http://placehold.it/50x50");
@@ -160,7 +161,7 @@ public class AccountResourceTest {
         .content(TestUtil.convertObjectToJsonBytes(validUser)))
       .andExpect(status().isCreated());
 
-    assertThat(userRepository.findOneByEmail("test-register-valid@example.com").isPresent()).isTrue();
+    assertThat(userRepository.findOneByEmail(validUser.getEmail()).isPresent()).isTrue();
   }
 
   @Test
