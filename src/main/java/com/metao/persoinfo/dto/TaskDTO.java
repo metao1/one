@@ -26,12 +26,13 @@ public class TaskDTO {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     TaskDTO taskDTO = (TaskDTO) o;
-    return Objects.equal(id, taskDTO.id) && Objects.equal(username, taskDTO.username);
+    return Objects.equal(getId(), taskDTO.getId()) &&
+      Objects.equal(getUsername(), taskDTO.getUsername());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(id);
+    return Objects.hashCode(getId(), getUsername());
   }
 
   public String getId() {

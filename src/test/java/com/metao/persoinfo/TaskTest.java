@@ -2,7 +2,6 @@ package com.metao.persoinfo;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.metao.persoinfo.dto.*;
-import com.metao.persoinfo.service.impl.TagService;
 import com.metao.persoinfo.service.impl.TaskService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -37,12 +36,10 @@ public class TaskTest extends BaseTest {
   @Autowired
   private TaskService taskService;
 
-  @Autowired
-  private TagService tagService;
-
   @Test
   public void getAllTasks() throws Exception {
-    this.mvc.perform(get(BASE_URL)
+    this.mvc.perform(get(BASE_URL + USER_NAME)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andExpect(status().is2xxSuccessful())
       .andDo(print())
@@ -61,7 +58,8 @@ public class TaskTest extends BaseTest {
   public void goSetup() throws Exception {
     BASE_URL += "task/";
     if (taskDTO == null) {
-      this.mvc.perform(get(BASE_URL)
+      this.mvc.perform(get(BASE_URL + USER_NAME)
+        .header("Authorization", "Bearer " + JWT)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
         .andExpect(status().is2xxSuccessful())
         .andDo(print())
@@ -83,7 +81,8 @@ public class TaskTest extends BaseTest {
 
   @Test
   public void getOneTask() throws Exception {
-    this.mvc.perform(get(BASE_URL + taskDTO.getId())
+    this.mvc.perform(get(BASE_URL + USER_NAME + "/" + taskDTO.getId())
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andExpect(status().isOk())
       .andDo(print())
@@ -113,11 +112,11 @@ public class TaskTest extends BaseTest {
     taskDTO.setDueDate(calendar.getTime());
     taskDTO.setImportant(false);
     taskDTO.setTags(Sets.newSet(new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232")));
-    taskService.saveOrUpdateModel(taskDTO);//save the task first
-    taskDTO.setTitle("updated title");
     String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
     }, taskDTO);
-    this.mvc.perform(put(BASE_URL + taskDTO.getId())
+
+    this.mvc.perform(post(BASE_URL + USER_NAME)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
       .content(jsonBody))
       .andDo(print())
@@ -130,7 +129,26 @@ public class TaskTest extends BaseTest {
         ResponseMap<TaskDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
         }, task.getResponse().getContentAsString());
         assertThat(dtoResponseMap.getResponse()).isEqualTo(taskDTO);
-        assertThat(dtoResponseMap.getResponse().getTitle()).isEqualTo("updated title");
+        TaskDTO savedTaskDTO = dtoResponseMap.getResponse();
+        savedTaskDTO.setTitle("updated title");
+        String newJsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
+        }, savedTaskDTO);
+        this.mvc.perform(put(BASE_URL + USER_NAME + "/" + savedTaskDTO.getId())
+          .header("Authorization", "Bearer " + JWT)
+          .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+          .content(newJsonBody))
+          .andDo(print())
+          .andExpect(status().is2xxSuccessful())
+          .andExpect(jsonPath("$.message").exists())
+          .andExpect(jsonPath("$.message").isString())
+          .andExpect(jsonPath("$.message").value("task"))
+          .andExpect(jsonPath("$.response").exists())
+          .andDo(updatedTask -> {
+            ResponseMap<TaskDTO> updatedDtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
+            }, updatedTask.getResponse().getContentAsString());
+            assertThat(updatedDtoResponseMap.getResponse()).isEqualTo(savedTaskDTO);
+            assertThat(updatedDtoResponseMap.getResponse().getTitle()).isEqualTo("updated title");
+          });
       });
   }
 
@@ -150,7 +168,8 @@ public class TaskTest extends BaseTest {
     taskDTO.setTags(Sets.newSet(tag));
     String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
     }, taskDTO);
-    this.mvc.perform(post(BASE_URL)
+    this.mvc.perform(post(BASE_URL + USER_NAME)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
       .content(jsonBody))
       .andDo(print())
@@ -177,15 +196,17 @@ public class TaskTest extends BaseTest {
     taskDTO.setTitle("Task Title");
     taskDTO.setDeleted(false);
     taskDTO.setCompleted(false);
-    taskDTO.setStartDate(new Date());
+    taskDTO.setDueDate(new Date());
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
-    taskDTO.setDueDate(calendar.getTime());
+    calendar.add(Calendar.DAY_OF_MONTH, 4);
+    taskDTO.setStartDate(calendar.getTime());
     taskDTO.setImportant(false);
     TagDTO tag = new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232");
     taskDTO.setTags(Sets.newSet(tag));
     String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
     }, taskDTO);
-    this.mvc.perform(post(BASE_URL)
+    this.mvc.perform(post(BASE_URL + USER_NAME)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
       .content(jsonBody))
       .andDo(print())
@@ -217,7 +238,8 @@ public class TaskTest extends BaseTest {
     taskDTO.setTags(Sets.newSet(tag, tag2));
     String jsonBody = objectFactory.toJson(new TypeReference<TaskDTO>() {
     }, taskDTO);
-    this.mvc.perform(post(BASE_URL)
+    this.mvc.perform(post(BASE_URL + USER_NAME)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
       .content(jsonBody))
       .andDo(print())
@@ -240,7 +262,8 @@ public class TaskTest extends BaseTest {
 
   @Test
   public void deleteTaskTest() throws Exception {
-    this.mvc.perform(delete(BASE_URL + taskDTO.getId())
+    this.mvc.perform(delete(BASE_URL + USER_NAME + "/" + taskDTO.getId())
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andDo(print())
       .andExpect(status().is2xxSuccessful());
@@ -248,7 +271,8 @@ public class TaskTest extends BaseTest {
 
   @Test
   public void deleteTaskFailedTest() throws Exception {
-    this.mvc.perform(delete(BASE_URL + 12333L)
+    this.mvc.perform(delete(BASE_URL + USER_NAME + "/" + 12333L)
+      .header("Authorization", "Bearer " + JWT)
       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
       .andDo(print())
       .andExpect(status().isNotFound())

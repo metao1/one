@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @FixMethodOrder(MethodSorters.JVM)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AccountResourceITTest {
+public class AccountResourceTest {
 
   @Autowired
   private UserRepository userRepository;
