@@ -117,6 +117,7 @@ public class WebConfig implements ServletContextInitializer, WebServerFactoryCus
 
     cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/i18n/*");
     cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
+    cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
     cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
     cachingHttpHeadersFilter.setAsyncSupported(true);
   }
@@ -129,6 +130,7 @@ public class WebConfig implements ServletContextInitializer, WebServerFactoryCus
       log.debug("Registering CORS filter");
       source.registerCorsConfiguration("/api/**", config);
       source.registerCorsConfiguration("/management/**", config);
+      source.registerCorsConfiguration("/assets/**", config);
       source.registerCorsConfiguration("/v2/api-docs", config);
     }
     return new CorsFilter(source);
