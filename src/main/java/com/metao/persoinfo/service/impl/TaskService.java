@@ -37,7 +37,6 @@ public class TaskService implements GeneralService<TaskDTO> {
       object.getDueDate()
         .before(object.getStartDate())) {
       throw new TaskException("The due date should be after started date");
-
     }
     if (object.getTags() != null) {//remove duplicates
       Set<TagDTO> tagDTOSet = new HashSet<>(object.getTags());
@@ -55,7 +54,7 @@ public class TaskService implements GeneralService<TaskDTO> {
       Task task = objectFactory.buildTask(object);
       task.setUsername(currentUserLogin.get());
       Task savedTask = taskRepository.save(task);
-      return objectFactory.buildTask(savedTask);
+      return savedTask != null ? object : null;
     } else {
       throw new InvalidLoginException();
     }

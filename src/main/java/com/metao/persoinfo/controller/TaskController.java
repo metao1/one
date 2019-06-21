@@ -29,10 +29,10 @@ public class TaskController {
   @ApiOperation(value = "Create a new task")
   public ResponseEntity<?> createTask(@PathVariable(value = "username") String username, @RequestBody TaskDTO task) {
     ResponseMap<TaskDTO> map = new ResponseMap<>("task", task);
-    if (taskService.isModelExist(task)) {
+   /* if (taskService.isModelExist(task)) {
       return new ResponseEntity<>(new CustomErrorType("Unable to create task. "
         + "task with id: " + task.getId() + " already exist"), HttpStatus.CONFLICT);
-    }
+    }*/
     taskService.saveOrUpdateModel(task);
     return new ResponseEntity<>(map, HttpStatus.CREATED);
   }

@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -185,6 +186,60 @@ public class TaskTest extends BaseTest {
         assertThat(dtoResponseMap.getResponse().getTags()).contains(tag);
         assertThat(dtoResponseMap.getResponse().getStartDate())
           .isBefore(dtoResponseMap.getResponse().getDueDate());
+      });
+  }
+
+  @Test
+  public void saveTaskAgainTest() throws Exception {
+    TaskDTO taskDTO = new TaskDTO();
+    taskDTO.setId(UUID.randomUUID().toString());
+    taskDTO.setTitle("Task Title");
+    taskDTO.setDeleted(false);
+    taskDTO.setCompleted(false);
+    taskDTO.setStartDate(new Date());
+    Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.GERMANY);
+    calendar.add(Calendar.DAY_OF_MONTH, 4);
+    taskDTO.setDueDate(calendar.getTime());
+    taskDTO.setImportant(false);
+    TagDTO tag = new TagDTO(UUID.randomUUID().toString(), "tag", "tag", "#323232");
+    taskDTO.setTags(Sets.newSet(tag));
+    AtomicReference<String> jsonBody = new AtomicReference<>(objectFactory.toJson(new TypeReference<TaskDTO>() {
+    }, taskDTO));
+    this.mvc.perform(post(BASE_URL + USER_NAME)
+      .header("Authorization", "Bearer " + JWT)
+      .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+      .content(jsonBody.get()))
+      .andDo(print())
+      .andExpect(status().is2xxSuccessful())
+      .andExpect(jsonPath("$.message").exists())
+      .andExpect(jsonPath("$.message").isString())
+      .andExpect(jsonPath("$.message").value("task"))
+      .andExpect(jsonPath("$.response").exists())
+      .andDo(task -> {
+        ResponseMap<TaskDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TaskDTO>>() {
+        }, task.getResponse().getContentAsString());
+        assertThat(dtoResponseMap.getResponse()).isEqualTo(taskDTO);
+        assertThat(dtoResponseMap.getResponse().getTitle()).isEqualTo("Task Title");
+        assertThat(dtoResponseMap.getResponse().getTags()).contains(tag);
+        assertThat(dtoResponseMap.getResponse().getStartDate())
+          .isBefore(dtoResponseMap.getResponse().getDueDate());
+        taskDTO.setId(UUID.randomUUID().toString());
+        taskDTO.setTitle("New Task Title");
+        taskDTO.setDeleted(false);
+        taskDTO.setCompleted(false);
+        taskDTO.setStartDate(new Date());
+        jsonBody.set(objectFactory.toJson(new TypeReference<TaskDTO>() {
+        }, taskDTO));
+        this.mvc.perform(post(BASE_URL + USER_NAME)
+          .header("Authorization", "Bearer " + JWT)
+          .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+          .content(jsonBody.get()))
+          .andDo(print())
+          .andExpect(status().is2xxSuccessful())
+          .andExpect(jsonPath("$.message").exists())
+          .andExpect(jsonPath("$.message").isString())
+          .andExpect(jsonPath("$.message").value("task"))
+          .andExpect(jsonPath("$.response").exists());
       });
   }
 
