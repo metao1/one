@@ -1,11 +1,6 @@
-
 buildscript {    // Configuration for building
   ext {
     springBootVersion = '2.1.6.RELEASE'
-  }
-  repositories {
-    jcenter()    // Bintray's repository - a fast Maven Central mirror & more
-    mavenCentral()
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -33,6 +28,10 @@ bootJar {
   }
 }
 
+jar {
+  enabled = true
+}
+
 test {
   useJUnitPlatform {
     includeEngines "junit-jupiter"
@@ -44,7 +43,6 @@ test {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 group = 'com.metao'

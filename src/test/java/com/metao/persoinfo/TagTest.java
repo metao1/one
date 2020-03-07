@@ -82,7 +82,7 @@ public class TagTest extends BaseTest {
       .andExpect(jsonPath("$.message").value("tag"))
       .andExpect(jsonPath("$.response").exists())
       .andDo(tag -> {
-        ResponseMap<TagDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<>() {
+        ResponseMap<TagDTO> dtoResponseMap = objectFactory.fromJson(new TypeReference<ResponseMap<TagDTO>>() {
         }, tag.getResponse().getContentAsString());
         assertThat(dtoResponseMap.getResponse()).isEqualTo(tagDTO);
       });
