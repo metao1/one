@@ -23,6 +23,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   private final TokenProvider tokenProvider;
 
   private final CorsFilter corsFilter;
+  private static String[] GLOBAL_ACCESS_POINTS = new String[]{"/api/register", "/api/activate",
+    "/api/account/reset-password/init", "/api/account/reset-password/finish", "/assets/*", "/management/health",
+    "/management/info", "/management/prometheus"
+  };
 
   public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter) {
     this.tokenProvider = tokenProvider;
@@ -65,16 +69,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       .and()
       .authorizeRequests()
-      .antMatchers("/api/authenticate").permitAll()
-      .antMatchers("/api/register").permitAll()
-      .antMatchers("/api/activate").permitAll()
-      .antMatchers("/api/account/reset-password/init").permitAll()
-      .antMatchers("/api/account/reset-password/finish").permitAll()
-      .antMatchers("/assets/*").permitAll()
+      .antMatchers(GLOBAL_ACCESS_POINTS).permitAll()
       .antMatchers("/api/**").authenticated()
-      .antMatchers("/management/health").permitAll()
-      .antMatchers("/management/info").permitAll()
-      .antMatchers("/management/prometheus").permitAll()
       .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
       .and()
       .apply(securityConfigurerAdapter());

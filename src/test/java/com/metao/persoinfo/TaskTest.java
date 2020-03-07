@@ -34,8 +34,6 @@ public class TaskTest extends BaseTest {
   @Autowired
   private ObjectFactory objectFactory;
 
-  @Autowired
-  private TaskService taskService;
 
   @Test
   public void getAllTasks() throws Exception {

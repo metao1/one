@@ -2,7 +2,7 @@ package com.metao.persoinfo.service.impl;
 
 import com.metao.persoinfo.dto.UserDTO;
 import com.metao.persoinfo.entity.Authority;
-import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.entity.UserEntity;
 import com.metao.persoinfo.exception.InvalidPasswordException;
 import com.metao.persoinfo.exception.LoginAlreadyUsedException;
 import com.metao.persoinfo.repository.AuthorityRepository;
@@ -50,7 +50,7 @@ public class UserService {
     this.cacheManager = cacheManager;
   }
 
-  public Optional<User> activateRegistration(String key) {
+  public Optional<UserEntity> activateRegistration(String key) {
     log.debug("Activating user for activation key {}", key);
     return userRepository.findOneByActivationKey(key)
       .map(user -> {
@@ -63,7 +63,7 @@ public class UserService {
       });
   }
 
-  public Optional<User> completePasswordReset(String newPassword, String key) {
+  public Optional<UserEntity> completePasswordReset(String newPassword, String key) {
     log.debug("Reset user password for reset key {}", key);
     return userRepository.findOneByResetKey(key)
       .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
@@ -76,9 +76,9 @@ public class UserService {
       });
   }
 
-  public Optional<User> requestPasswordReset(String mail) {
+  public Optional<UserEntity> requestPasswordReset(String mail) {
     return userRepository.findOneByEmailIgnoreCase(mail)
-      .filter(User::getActivated)
+      .filter(UserEntity::getActivated)
       .map(user -> {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
@@ -87,70 +87,70 @@ public class UserService {
       });
   }
 
-  public User registerUser(UserDTO userDTO, String password) {
+  public UserEntity registerUser(UserDTO userDTO, String password) {
     userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase()).ifPresent(existingUser -> {
       throw new LoginAlreadyUsedException();
     });
-    User newUser = new User();
+    UserEntity newUserEntity = new UserEntity();
     String encryptedPassword = passwordEncoder.encode(password);
-    newUser.setEmail(userDTO.getEmail().toLowerCase());
+    newUserEntity.setEmail(userDTO.getEmail().toLowerCase());
     // new user gets initially a generated password
-    newUser.setPassword(encryptedPassword);
-    newUser.setName(userDTO.getName());
-    newUser.setImageUrl(userDTO.getImageUrl());
-    newUser.setLangKey(userDTO.getLangKey());
+    newUserEntity.setPassword(encryptedPassword);
+    newUserEntity.setName(userDTO.getName());
+    newUserEntity.setImageUrl(userDTO.getImageUrl());
+    newUserEntity.setLangKey(userDTO.getLangKey());
     // new user is not active
-    newUser.setActivated(false);
+    newUserEntity.setActivated(false);
     // new user gets registration key
-    newUser.setActivationKey(RandomUtil.generateActivationKey());
+    newUserEntity.setActivationKey(RandomUtil.generateActivationKey());
     Set<Authority> authorities = new HashSet<>();
     authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-    newUser.setAuthorities(authorities);
-    userRepository.save(newUser);
-    this.clearUserCaches(newUser);
-    log.debug("Created Information for User: {}", newUser);
-    return newUser;
+    newUserEntity.setAuthorities(authorities);
+    userRepository.save(newUserEntity);
+    this.clearUserCaches(newUserEntity);
+    log.debug("Created Information for User: {}", newUserEntity);
+    return newUserEntity;
   }
 
-  private boolean removeNonActivatedUser(User existingUser) {
-    if (existingUser.getActivated()) {
+  private boolean removeNonActivatedUser(UserEntity existingUserEntity) {
+    if (existingUserEntity.getActivated()) {
       return false;
     }
-    userRepository.delete(existingUser);
+    userRepository.delete(existingUserEntity);
     userRepository.flush();
-    this.clearUserCaches(existingUser);
+    this.clearUserCaches(existingUserEntity);
     return true;
   }
 
-  public User createUser(UserDTO userDTO) {
-    User user = new User();
+  public UserEntity createUser(UserDTO userDTO) {
+    UserEntity userEntity = new UserEntity();
 
-    user.setEmail(userDTO.getEmail().toLowerCase());
-    user.setName(userDTO.getName());
-    user.setEmail(userDTO.getEmail().toLowerCase());
-    user.setImageUrl(userDTO.getImageUrl());
+    userEntity.setEmail(userDTO.getEmail().toLowerCase());
+    userEntity.setName(userDTO.getName());
+    userEntity.setEmail(userDTO.getEmail().toLowerCase());
+    userEntity.setImageUrl(userDTO.getImageUrl());
     if (userDTO.getLangKey() == null) {
-      user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+      userEntity.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
     } else {
-      user.setLangKey(userDTO.getLangKey());
+      userEntity.setLangKey(userDTO.getLangKey());
     }
     String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-    user.setPassword(encryptedPassword);
-    user.setResetKey(RandomUtil.generateResetKey());
-    user.setResetDate(Instant.now());
-    user.setActivated(true);
+    userEntity.setPassword(encryptedPassword);
+    userEntity.setResetKey(RandomUtil.generateResetKey());
+    userEntity.setResetDate(Instant.now());
+    userEntity.setActivated(true);
     if (userDTO.getAuthorities() != null) {
       Set<Authority> authorities = userDTO.getAuthorities().stream()
         .map(authorityRepository::findById)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(Collectors.toSet());
-      user.setAuthorities(authorities);
+      userEntity.setAuthorities(authorities);
     }
-    userRepository.save(user);
-    this.clearUserCaches(user);
-    log.debug("Created Information for User: {}", user);
-    return user;
+    userRepository.save(userEntity);
+    this.clearUserCaches(userEntity);
+    log.debug("Created Information for User: {}", userEntity);
+    return userEntity;
   }
 
   /**
@@ -236,17 +236,17 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public Optional<User> getUserWithAuthoritiesByLoginEmail(String login) {
+  public Optional<UserEntity> getUserWithAuthoritiesByLoginEmail(String login) {
     return userRepository.findOneWithAuthoritiesByEmail(login);
   }
 
   @Transactional(readOnly = true)
-  public Optional<User> getUserWithAuthorities(String id) {
+  public Optional<UserEntity> getUserWithAuthorities(String id) {
     return userRepository.findOneWithAuthoritiesById(id);
   }
 
   @Transactional(readOnly = true)
-  public Optional<User> getUserWithAuthorities() {
+  public Optional<UserEntity> getUserWithAuthorities() {
     return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByEmail);
   }
 
@@ -275,7 +275,7 @@ public class UserService {
     return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
   }
 
-  private void clearUserCaches(User user) {
-    Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+  private void clearUserCaches(UserEntity userEntity) {
+    Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(userEntity.getEmail());
   }
 }

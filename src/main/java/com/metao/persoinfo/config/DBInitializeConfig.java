@@ -6,7 +6,8 @@ import com.metao.persoinfo.dto.ObjectFactory;
 import com.metao.persoinfo.entity.Authority;
 import com.metao.persoinfo.entity.Tag;
 import com.metao.persoinfo.entity.Task;
-import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.entity.UserEntity;
+import com.metao.persoinfo.repository.AuthorityRepository;
 import com.metao.persoinfo.repository.FilterRepository;
 import com.metao.persoinfo.repository.TagRepository;
 import com.metao.persoinfo.repository.TaskRepository;
@@ -19,10 +20,14 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Configuration
-@Profile("dev")
+@Profile("heroku")
 public class DBInitializeConfig {
 
   @Autowired
@@ -39,6 +44,9 @@ public class DBInitializeConfig {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  AuthorityRepository authorityRepository;
 
   @Autowired
   PasswordEncoder passwordEncoder;
@@ -86,17 +94,22 @@ public class DBInitializeConfig {
     }
     String encryptedPassword = passwordEncoder.encode("mehrdad");
 
-    User user = new User();
-    user.setName("mal");
-    user.setPassword(encryptedPassword);
-    user.setEmail("mal@gmail.com");
-    user.setActivated(true);
-    user.setImageUrl("http://placehold.it/50x50");
-    user.setLangKey(Constants.DEFAULT_LANGUAGE);
-    Authority authority = new Authority();
-    authority.setName(AuthoritiesConstants.USER);
-    user.setAuthorities(Collections.singleton(authority));
-    userRepository.saveAndFlush(user);
+    UserEntity userEntity = new UserEntity();
+    userEntity.setName("mal");
+    userEntity.setPassword(encryptedPassword);
+    userEntity.setEmail("mal@gmail.com");
+    userEntity.setActivated(true);
+    userEntity.setImageUrl("http://placehold.it/50x50");
+    userEntity.setLangKey(Constants.DEFAULT_LANGUAGE);
+    Authority userAuthority = new Authority();
+    userAuthority.setName(AuthoritiesConstants.USER);
+    Authority adminAuthority = new Authority();
+    adminAuthority.setName(AuthoritiesConstants.ADMIN);
+
+    userEntity.setAuthorities(Collections.singleton(adminAuthority));
+    authorityRepository.save(userAuthority);
+    authorityRepository.save(adminAuthority);
+    userRepository.saveAndFlush(userEntity);
   }
 }
 

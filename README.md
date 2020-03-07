@@ -83,11 +83,11 @@ The following guides illustrate how to use some features concretely:
 Feel free to focus on a single feature or aspect of the application. Here are some ideas if you don't know where to start:
 
 * __Frontend application feature improvements:__
-   - a user can assign priorities
-   - a user can add categories
-   - a user can sort the list of tasks
-   - a user can use markdown
-   - a user's tasks are persisted in the browser's storage
+   - a userEntity can assign priorities
+   - a userEntity can add categories
+   - a userEntity can sort the list of tasks
+   - a userEntity can use markdown
+   - a userEntity's tasks are persisted in the browser's storage
    - ...
 * __Backend application features:__
    - the application contains a RESTful API

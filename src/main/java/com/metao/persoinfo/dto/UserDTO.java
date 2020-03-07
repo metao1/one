@@ -2,7 +2,7 @@ package com.metao.persoinfo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.metao.persoinfo.entity.Authority;
-import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.entity.UserEntity;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -49,19 +49,19 @@ public class UserDTO {
     // Empty constructor needed for Jackson.
   }
 
-  public UserDTO(User user) {
-    this.id = user.getId();
-    this.email = user.getEmail();
-    this.name = user.getName();
-    this.email = user.getEmail();
-    this.activated = user.getActivated();
-    this.createdBy = user.getCreatedBy();
-    this.imageUrl = user.getImageUrl();
-    this.langKey = user.getLangKey();
-    this.createdDate = user.getCreatedDate();
-    this.lastModifiedBy = user.getLastModifiedBy();
-    this.lastModifiedDate = user.getLastModifiedDate();
-    this.authorities = user.getAuthorities().stream()
+  public UserDTO(UserEntity userEntity) {
+    this.id = userEntity.getId();
+    this.email = userEntity.getEmail();
+    this.name = userEntity.getName();
+    this.email = userEntity.getEmail();
+    this.activated = userEntity.getActivated();
+    this.createdBy = userEntity.getCreatedBy();
+    this.imageUrl = userEntity.getImageUrl();
+    this.langKey = userEntity.getLangKey();
+    this.createdDate = userEntity.getCreatedDate();
+    this.lastModifiedBy = userEntity.getLastModifiedBy();
+    this.lastModifiedDate = userEntity.getLastModifiedDate();
+    this.authorities = userEntity.getAuthorities().stream()
       .map(Authority::getName)
       .collect(Collectors.toSet());
   }

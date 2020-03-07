@@ -4,7 +4,7 @@ import com.metao.persoinfo.dto.KeyAndPasswordDTO;
 import com.metao.persoinfo.dto.ManagedUserDTO;
 import com.metao.persoinfo.dto.PasswordChangeDTO;
 import com.metao.persoinfo.dto.UserDTO;
-import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.entity.UserEntity;
 import com.metao.persoinfo.exception.AccountResourceException;
 import com.metao.persoinfo.exception.EmailAlreadyUsedException;
 import com.metao.persoinfo.exception.EmailNotFoundException;
@@ -58,7 +58,7 @@ public class AccountController {
     if (!checkPasswordLength(managedUserDTO.getPassword())) {
       throw new InvalidPasswordException();
     }
-    User user = userService.registerUser(managedUserDTO, managedUserDTO.getPassword());
+    UserEntity userEntity = userService.registerUser(managedUserDTO, managedUserDTO.getPassword());
     //mailService.sendActivationEmail(user);
   }
 
@@ -70,7 +70,7 @@ public class AccountController {
    */
   @GetMapping("/activate")
   public void activateAccount(@RequestParam(value = "key") String key) {
-    Optional<User> user = userService.activateRegistration(key);
+    Optional<UserEntity> user = userService.activateRegistration(key);
     if (!user.isPresent()) {
       throw new AccountResourceException("No user was found for this activation key");
     }
@@ -112,11 +112,11 @@ public class AccountController {
   public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
     String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() ->
       new AccountResourceException("Current user login not found"));
-    Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+    Optional<UserEntity> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
     if (existingUser.isPresent() && (!existingUser.get().getEmail().equalsIgnoreCase(userLogin))) {
       throw new EmailAlreadyUsedException();
     }
-    Optional<User> user = userRepository.findOneByEmail(userLogin);
+    Optional<UserEntity> user = userRepository.findOneByEmail(userLogin);
     if (!user.isPresent()) {
       throw new AccountResourceException("User could not be found");
     }
@@ -163,7 +163,7 @@ public class AccountController {
     if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
       throw new InvalidPasswordException();
     }
-    Optional<User> user =
+    Optional<UserEntity> user =
       userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
     if (!user.isPresent()) {

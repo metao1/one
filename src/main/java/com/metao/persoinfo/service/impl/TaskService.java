@@ -13,7 +13,12 @@ import com.metao.persoinfo.service.GeneralService;
 import com.metao.persoinfo.util.SecurityUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService implements GeneralService<TaskDTO> {
@@ -54,7 +59,7 @@ public class TaskService implements GeneralService<TaskDTO> {
       Task task = objectFactory.buildTask(object);
       task.setUsername(currentUserLogin.get());
       Task savedTask = taskRepository.save(task);
-      return savedTask != null ? object : null;
+      return object;
     } else {
       throw new InvalidLoginException();
     }
@@ -76,17 +81,12 @@ public class TaskService implements GeneralService<TaskDTO> {
   @Override
   public List<TaskDTO> getModels(String username) {
     List<Task> taskList = taskRepository.findAll();
-    List<TaskDTO> taskDTOList = new ArrayList<>();
-    taskList
+    return taskList
       .stream()
       .filter(Objects::nonNull)
       .filter(s -> s.getId() != null)
       .filter(s -> s.getUsername().equalsIgnoreCase(username))
-      .forEach(task -> {
-        TaskDTO taskDTO = objectFactory.buildTask(task);
-        taskDTOList.add(taskDTO);
-      });
-    return taskDTOList;
+      .map(objectFactory::buildTask).collect(Collectors.toList());
   }
 
   @Override

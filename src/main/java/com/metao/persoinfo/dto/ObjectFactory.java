@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metao.persoinfo.entity.Filter;
 import com.metao.persoinfo.entity.Tag;
 import com.metao.persoinfo.entity.Task;
-import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 
 public class ObjectFactory {
@@ -53,8 +53,8 @@ public class ObjectFactory {
    * Builds User from UserDTO
    */
 
-  public User buildUser(UserDTO userDTO) {
-    return modelMapper.map(userDTO, User.class);
+  public UserEntity buildUser(UserDTO userDTO) {
+    return modelMapper.map(userDTO, UserEntity.class);
   }
 
   /**

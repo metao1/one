@@ -2,7 +2,10 @@ package com.metao.persoinfo.config;
 
 import com.metao.persoinfo.dto.ObjectFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.collection.spi.PersistentCollection;
+import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +28,9 @@ public class AppConfig {
 
   @Bean
   public ModelMapper getModelMapper() {
-    return new ModelMapper();
+    ModelMapper modelMapper = new ModelMapper();
+    modelMapper.getConfiguration().setPropertyCondition(context -> !(context.getSource() instanceof PersistentCollection));
+    return modelMapper;
   }
 
   @Bean

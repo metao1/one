@@ -3,7 +3,7 @@ package com.metao.persoinfo.config;
 import com.metao.persoinfo.entity.Authority;
 import com.metao.persoinfo.entity.Tag;
 import com.metao.persoinfo.entity.Task;
-import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.entity.UserEntity;
 import com.metao.persoinfo.properties.PersoInfoProperties;
 import com.metao.persoinfo.repository.UserRepository;
 import org.ehcache.config.builders.*;
@@ -45,9 +45,9 @@ public class CacheConfiguration {
     return cm -> {
       createCache(cm, UserRepository.USERS_BY_LOGIN_CACHE);
       createCache(cm, UserRepository.USERS_BY_EMAIL_CACHE);
-      createCache(cm, User.class.getName());
+      createCache(cm, UserEntity.class.getName());
       createCache(cm, Authority.class.getName());
-      createCache(cm, User.class.getName() + ".authorities");
+      createCache(cm, UserEntity.class.getName() + ".authorities");
       createCache(cm, Tag.class.getName() + ".operations");
       createCache(cm, Task.class.getName() + ".operations");
     };

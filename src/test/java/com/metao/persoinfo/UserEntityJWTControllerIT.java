@@ -3,7 +3,7 @@ package com.metao.persoinfo;
 import com.metao.persoinfo.config.TokenProvider;
 import com.metao.persoinfo.controller.UserJWTController;
 import com.metao.persoinfo.dto.LoginVM;
-import com.metao.persoinfo.entity.User;
+import com.metao.persoinfo.entity.UserEntity;
 import com.metao.persoinfo.handler.RestResponseEntityExceptionHandler;
 import com.metao.persoinfo.repository.UserRepository;
 import org.junit.Before;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @FixMethodOrder(MethodSorters.JVM)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserJWTControllerIT {
+public class UserEntityJWTControllerIT {
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -60,12 +60,12 @@ public class UserJWTControllerIT {
     @Test
     @Transactional
     public void testAuthorize() throws Exception {
-        User user = new User();
-        user.setEmail("user-jwt-controller@example.com");
-        user.setActivated(true);
-        user.setPassword(passwordEncoder.encode("test"));
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("user-jwt-controller@example.com");
+        userEntity.setActivated(true);
+        userEntity.setPassword(passwordEncoder.encode("test"));
 
-        userRepository.saveAndFlush(user);
+        userRepository.saveAndFlush(userEntity);
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller@example.com");
@@ -82,12 +82,12 @@ public class UserJWTControllerIT {
     @Test
     @Transactional
     public void testAuthorizeWithRememberMe() throws Exception {
-        User user = new User();
-        user.setEmail("user-jwt-controller-remember-me@example.com");
-        user.setActivated(true);
-        user.setPassword(passwordEncoder.encode("test"));
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("user-jwt-controller-remember-me@example.com");
+        userEntity.setActivated(true);
+        userEntity.setPassword(passwordEncoder.encode("test"));
 
-        userRepository.saveAndFlush(user);
+        userRepository.saveAndFlush(userEntity);
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller-remember-me@example.com");

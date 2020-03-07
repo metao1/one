@@ -18,16 +18,15 @@ import java.util.Set;
 /**
  * A user.
  */
-@Entity(name = "User")
-@Table(name = "user")
+@Entity
+@Table(name = "active_user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class User extends AbstractAuditingEntity implements Serializable {
+public class UserEntity extends AbstractAuditingEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private Long id;
 
   @JsonIgnore
@@ -74,7 +73,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
   @ManyToMany
   @JoinTable(
     name = "user_authority",
-    joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+    joinColumns = {@JoinColumn(name = "id")},
     inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
   @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @BatchSize(size = 20)
@@ -176,10 +175,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof User)) {
+    if (!(o instanceof UserEntity)) {
       return false;
     }
-    return id != null && id.equals(((User) o).id);
+    return id != null && id.equals(((UserEntity) o).id);
   }
 
   @Override

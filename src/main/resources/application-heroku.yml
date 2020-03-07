@@ -1,39 +1,22 @@
 spring:
-  devtools:
-    restart:
-      enabled: true
-    livereload:
-      enabled: false # we use gulp + BrowserSync for livereload
-  jackson:
-    serialization.indent_output: true
-  messages:
-    cache-duration: 1
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/persoinfo?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: persoinfo
-    password: persoinfo
-    hikari:
-      poolName: Hikari
-      auto-commit: false
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    database: MYSQL
+    database: POSTGRESQL
     show-sql: true
-
-    properties:
-       hibernate.id.new_generator_mappings: true
-       hibernate.connection.provider_disables_autocommit: true
-       hibernate.cache.use_second_level_cache: true
-       hibernate.cache.use_query_cache: false
-       hibernate.generate_statistics: false
+    generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect # disable clob warning
+    properties: # disable clob warning
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+    open-in-view: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://ec2-3-230-106-126.compute-1.amazonaws.com:5432/d1qh5bn375qvc8?sslmode=require
+    username: xkcyfffauwitmu
+    password: 6a6c11f6316af242ca8a25872c8931245d6c645c2a00da1b9335a9f564dfa338
+
 
 logging:
   level:
