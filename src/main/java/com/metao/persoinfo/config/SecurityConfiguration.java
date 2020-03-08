@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   private final TokenProvider tokenProvider;
 
   private final CorsFilter corsFilter;
-  private static String[] GLOBAL_ACCESS_POINTS = new String[]{"/api/register", "/api/activate",
+  private static String[] GLOBAL_ACCESS_POINTS = new String[]{"/api/register", "/api/authenticate", "/api/activate",
     "/api/account/reset-password/init", "/api/account/reset-password/finish", "/assets/*", "/management/health",
     "/management/info", "/management/prometheus"
   };

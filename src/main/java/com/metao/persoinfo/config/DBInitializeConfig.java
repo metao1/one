@@ -25,9 +25,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Configuration
-@Profile("heroku")
 public class DBInitializeConfig {
 
   @Autowired
@@ -106,9 +107,10 @@ public class DBInitializeConfig {
     Authority adminAuthority = new Authority();
     adminAuthority.setName(AuthoritiesConstants.ADMIN);
 
-    userEntity.setAuthorities(Collections.singleton(adminAuthority));
+    userEntity.setAuthorities(Stream.of(adminAuthority,userAuthority).collect(Collectors.toSet()));
     authorityRepository.save(userAuthority);
     authorityRepository.save(adminAuthority);
+
     userRepository.saveAndFlush(userEntity);
   }
 }
