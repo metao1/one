@@ -24,7 +24,7 @@ springBoot {
 
 bootJar {
   manifest {
-    attributes 'Start-Class': 'com.metao.persoinfo.PersoInfoApplication'
+    attributes 'Main-Class': 'com.metao.persoinfo.PersoInfoApplication'
   }
 }
 
