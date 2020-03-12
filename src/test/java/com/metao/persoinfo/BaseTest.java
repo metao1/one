@@ -2,7 +2,7 @@ package com.metao.persoinfo;
 
 import com.metao.persoinfo.dto.LoginVM;
 import com.metao.persoinfo.dto.ObjectFactory;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public abstract class BaseTest {
   @Autowired
   protected WebApplicationContext wac;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     this.bindingResult = Mockito.mock(BindingResult.class);
     this.mvc = MockMvcBuilders.webAppContextSetup(wac)
