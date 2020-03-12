@@ -1,3 +1,25 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: false
+  jackson:
+    serialization.indent_output: true
+  messages:
+    cache-duration: 1
+
+logging:
+  level:
+    com.metao.persoinfo: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
 micromonitor:
   clientApp:
     name: 'persoinfo'
