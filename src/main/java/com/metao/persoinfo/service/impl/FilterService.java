@@ -24,10 +24,9 @@ public class FilterService implements GeneralService<FilterDTO> {
   private ObjectFactory objectFactory;
 
   @Override
-  public FilterDTO saveOrUpdateModel(FilterDTO object) {
+  public void saveOrUpdateModel(FilterDTO object) {
     Filter filter = objectFactory.buildFilter(object);
-    Filter savedFilter = filterRepository.save(filter);
-    return objectFactory.buildFilter(savedFilter);
+    filterRepository.save(filter);
   }
 
   @Override

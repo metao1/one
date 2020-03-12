@@ -24,15 +24,14 @@ public class TagService implements GeneralService<TagDTO> {
   private ObjectFactory objectFactory;
 
   @Override
-  public TagDTO saveOrUpdateModel(TagDTO object) {
+  public void saveOrUpdateModel(TagDTO object) {
     Tag tag = objectFactory.buildTag(object);
-    Tag savedTag = tagRepository.save(tag);
-    return objectFactory.buildTag(savedTag);
+    tagRepository.save(tag);
   }
 
   @Override
   public TagDTO getModel(String id) {
-    return tagRepository.findById(id)
+    return tagRepository. findById(id)
       .map(tag -> objectFactory.buildTag(tag))
       .orElseThrow(() -> new NotFoundException(
         String.format("the expected %s tag", id)));

@@ -36,7 +36,7 @@ public class TaskService implements GeneralService<TaskDTO> {
   }
 
   @Override
-  public TaskDTO saveOrUpdateModel(TaskDTO object) {
+  public void saveOrUpdateModel(TaskDTO object) {
     if (object.getDueDate() != null &&
       object.getStartDate() != null &&
       object.getDueDate()
@@ -58,8 +58,7 @@ public class TaskService implements GeneralService<TaskDTO> {
     if (currentUserLogin.isPresent()) {
       Task task = objectFactory.buildTask(object);
       task.setUsername(currentUserLogin.get());
-      Task savedTask = taskRepository.save(task);
-      return object;
+      taskRepository.save(task);
     } else {
       throw new InvalidLoginException();
     }

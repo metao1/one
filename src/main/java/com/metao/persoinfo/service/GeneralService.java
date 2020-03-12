@@ -8,7 +8,7 @@ import java.util.List;
  */
 public interface GeneralService<T> {
 
-  public T saveOrUpdateModel(T object);
+  public void saveOrUpdateModel(T object);
 
   public T getModel(String id);
 
